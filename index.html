@@ -2057,18 +2057,12 @@ const DEFS = [
                   "type": "text",
                   "content": "Built a replicated base projectile class in GAS that handles spawn, travel, collision, and effect application. Child classes override only what's unique to them — travel speed, homing behavior, hit effects — while replication, cooldown tracking, and prediction come for free from the base. Adding a new projectile means writing one class instead of rebuilding the full pipeline each time."
                 }
-              ],
-              [
-                {
-                  "type": "media",
-                  "files": []
-                }
               ]
             ]
           },
           {
             "type": "sub-header",
-            "label": "Ground Slam — From Air"
+            "label": "Ground Slam"
           },
           {
             "type": "section",
@@ -2077,35 +2071,14 @@ const DEFS = [
               [
                 {
                   "type": "text",
-                  "content": "The airborne Ground Slam activates mid-air and locks the player into a dive toward the ground. On impact, a GAS Gameplay Effect applies an AoE attribute change to all targets in range, server-authoritative with cosmetic prediction on the client. The two-phase input (activate in air → impact) required careful tag gating so the ability can't be cancelled once committed."
+                  "content": "Ground Slam has two variants — airborne and grounded — built on the same base class. The airborne version activates mid-air and locks the player into a dive; the grounded version is shorter-range with a faster activation window. On impact, a GAS Gameplay Effect applies an AoE attribute change to all targets in range, server-authoritative with cosmetic prediction on the client. The two-phase input (activate in air → impact) required careful tag gating so the ability can't be cancelled once committed. The shared base meant the networked impact logic didn't need to be written twice — child classes only define targeting radius and activation tags."
                 }
               ],
               [
                 {
                   "type": "embed",
-                  "url": ""
-                }
-              ]
-            ]
-          },
-          {
-            "type": "sub-header",
-            "label": "Ground Slam — On Ground"
-          },
-          {
-            "type": "section",
-            "layout": "one-two",
-            "cols": [
-              [
-                {
-                  "type": "text",
-                  "content": "The grounded Ground Slam is a shorter-range version with a faster activation window. Built on the same base class as the aerial version but with different GAS tags and a distinct targeting radius. The shared base meant the networked impact logic didn't need to be written twice."
-                }
-              ],
-              [
-                {
-                  "type": "embed",
-                  "url": ""
+                  "url": "",
+                  "file": "assets/videos/GroundSlam.webm"
                 }
               ]
             ]
@@ -2127,7 +2100,8 @@ const DEFS = [
               [
                 {
                   "type": "embed",
-                  "url": ""
+                  "url": "",
+                  "file": "assets/videos/Grapple.webm"
                 }
               ]
             ]
@@ -2149,36 +2123,15 @@ const DEFS = [
               [
                 {
                   "type": "embed",
-                  "url": ""
+                  "url": "",
+                  "file": "assets/videos/LightningProjectile.webm"
                 }
               ]
             ]
           },
           {
             "type": "sub-header",
-            "label": "Alvar Projectile"
-          },
-          {
-            "type": "section",
-            "layout": "one-two",
-            "cols": [
-              [
-                {
-                  "type": "text",
-                  "content": "Slow arcing projectile that applies a persistent Gameplay Effect on hit — reducing the target's movement speed over a duration. The slow is implemented as an attribute modifier in GAS, stackable up to a cap so multiple hits compound. Designed for the Alvar character kit to support a control-and-punish playstyle."
-                }
-              ],
-              [
-                {
-                  "type": "embed",
-                  "url": ""
-                }
-              ]
-            ]
-          },
-          {
-            "type": "sub-header",
-            "label": "Dagger Projectile"
+            "label": "Piercing Projectile"
           },
           {
             "type": "section",
@@ -2193,7 +2146,8 @@ const DEFS = [
               [
                 {
                   "type": "embed",
-                  "url": ""
+                  "url": "",
+                  "file": "assets/videos/PiercingProjectile.webm"
                 }
               ]
             ]
@@ -2215,7 +2169,31 @@ const DEFS = [
               [
                 {
                   "type": "embed",
-                  "url": ""
+                  "url": "",
+                  "file": "assets/videos/WindCharge.webm"
+                }
+              ]
+            ]
+          },
+          {
+            "type": "sub-header",
+            "label": "Gravebind"
+          },
+          {
+            "type": "section",
+            "layout": "one-two",
+            "cols": [
+              [
+                {
+                  "type": "text",
+                  "content": "Gravebind is a damage-over-time projectile that leverages GAS Effects. On impact it spawns a lingering zone — any player that enters the area receives a stacking DoT and movement speed slow, both applied as duration-based Gameplay Effects with server-authoritative tick rates. The zone's lifetime, tick interval, and effect magnitudes are all data-driven through GAS effect assets."
+                }
+              ],
+              [
+                {
+                  "type": "embed",
+                  "url": "",
+                  "file": "assets/videos/Gravebind.webm"
                 }
               ]
             ]
@@ -2237,7 +2215,8 @@ const DEFS = [
               [
                 {
                   "type": "embed",
-                  "url": ""
+                  "url": "",
+                  "file": "assets/videos/hexaport.webm"
                 }
               ]
             ]
@@ -2254,10 +2233,6 @@ const DEFS = [
                 {
                   "type": "text",
                   "content": "Gameplay Effects across the roster are authored as data assets — designers specify magnitude, duration, stacking rules, and tag requirements without touching code. The system supports instant, duration-based, and infinite effects with stack caps and removal conditions. Built to let designers author new effects independently once the base classes were established."
-                },
-                {
-                  "type": "media",
-                  "files": []
                 }
               ]
             ]
@@ -2274,10 +2249,6 @@ const DEFS = [
                 {
                   "type": "text",
                   "content": "Implemented in C++ to bypass Blueprint's networking limitations that were routing audio solely through the game state. The system broadcasts sound cues via RPCs with attenuation handled per-client, preventing the owning client from double-playing sounds that were also triggered by prediction. Fallback handling ensures sounds still play if the RPC is dropped."
-                },
-                {
-                  "type": "media",
-                  "files": []
                 }
               ]
             ]
@@ -2294,84 +2265,6 @@ const DEFS = [
                 {
                   "type": "text",
                   "content": "Server-side respawn timer per player with spectator state during the countdown. Spawn point selection uses a scoring function that weighs distance from enemies and proximity to teammates, preventing spawn-trapping in small arena layouts. Timer and spawn state are replicated to the relevant client's HUD."
-                },
-                {
-                  "type": "media",
-                  "files": []
-                }
-              ]
-            ]
-          },
-          {
-            "type": "subsection-header",
-            "label": "Objective Logic"
-          },
-          {
-            "type": "text",
-            "content": "[Overview of the Objective Logic system — how scoring, waypoints, and throwing interactions are tied together under one replicated framework.]"
-          },
-          {
-            "type": "sub-header",
-            "label": "Scoring"
-          },
-          {
-            "type": "section",
-            "layout": "one-two",
-            "cols": [
-              [
-                {
-                  "type": "text",
-                  "content": "[Describe the scoring system — how points are awarded, replicated to all clients, and surfaced in the HUD.]"
-                }
-              ],
-              [
-                {
-                  "type": "embed",
-                  "url": ""
-                }
-              ]
-            ]
-          },
-          {
-            "type": "sub-header",
-            "label": "Waypoints"
-          },
-          {
-            "type": "section",
-            "layout": "one-two",
-            "cols": [
-              [
-                {
-                  "type": "text",
-                  "content": "[Describe waypoint capture logic — how capture progress is tracked, contested, and communicated to players.]"
-                }
-              ],
-              [
-                {
-                  "type": "embed",
-                  "url": ""
-                }
-              ]
-            ]
-          },
-          {
-            "type": "sub-header",
-            "label": "Throwing Interaction"
-          },
-          {
-            "type": "section",
-            "layout": "one-two",
-            "cols": [
-              [
-                {
-                  "type": "text",
-                  "content": "[Describe the throwing interaction — how objects are picked up, aimed, thrown, and how damage/effect on landing is resolved across the network.]"
-                }
-              ],
-              [
-                {
-                  "type": "embed",
-                  "url": ""
                 }
               ]
             ]
@@ -2394,10 +2287,6 @@ const DEFS = [
                 {
                   "type": "text",
                   "content": "Before designing any abilities, I established five interaction pillars that every character kit had to satisfy. The pillars ensured systemic counterplay and balanced team compositions — no character could be strong without exposing a corresponding weakness to at least one other character archetype."
-                },
-                {
-                  "type": "media",
-                  "files": []
                 }
               ]
             ]
@@ -3048,10 +2937,10 @@ function renderModal(g) {
     </div>
     <div class="proj-divider"></div>
     ${contentHtml}
-    <div class="reflection-sec">
+    ${editMode ? `<div class="reflection-sec">
       <div class="reflection-lbl">Reflection</div>
       <div class="reflection-body" contenteditable="${ce}">${g.reflection||'Write your reflection here.'}</div>
-    </div>
+    </div>` : ''}
     ${pnHtml}
   `;
 
@@ -3060,7 +2949,7 @@ function renderModal(g) {
   body.querySelector('.ph-title').addEventListener('blur',function(){const g2=gById(g.id);if(g2){g2.title=this.innerText;document.getElementById('pm-title').textContent=this.innerText;}});
   body.querySelector('.ph-studio').addEventListener('blur',function(){const g2=gById(g.id);if(g2)g2.studio=this.innerText;});
   body.querySelector('.ph-desc').addEventListener('blur',function(){const g2=gById(g.id);if(g2)g2.desc=this.innerText;});
-  body.querySelector('.reflection-body').addEventListener('blur',function(){const g2=gById(g.id);if(g2)g2.reflection=this.innerHTML;});
+  const refBody=body.querySelector('.reflection-body'); if(refBody) refBody.addEventListener('blur',function(){const g2=gById(g.id);if(g2)g2.reflection=this.innerHTML;});
   const metaFields=['role','duration','genre','engine','status'];
   body.querySelectorAll('.ph-meta-val').forEach((el,i)=>{
     el.addEventListener('blur',function(){const g2=gById(g.id);if(g2)g2[metaFields[i]]=this.innerText;});
