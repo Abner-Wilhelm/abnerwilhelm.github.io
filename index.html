@@ -1348,24 +1348,6 @@ const DEFS = [
             ]
           },
           {
-            "type": "section",
-            "layout": "one-two",
-            "cols": [
-              [
-                {
-                  "type": "text",
-                  "content": "[Describe the second NPC behavior.]"
-                }
-              ],
-              [
-                {
-                  "type": "media",
-                  "files": []
-                }
-              ]
-            ]
-          },
-          {
             "type": "sub-header",
             "label": "Mistwalker AI"
           },
@@ -1407,24 +1389,6 @@ const DEFS = [
                   "type": "embed",
                   "url": "https://youtu.be/2pfkv510zeI",
                   "file": "assets/videos/crowai.webm"
-                }
-              ]
-            ]
-          },
-          {
-            "type": "section",
-            "layout": "one-two",
-            "cols": [
-              [
-                {
-                  "type": "text",
-                  "content": "[Describe the second enemy behavior.]"
-                }
-              ],
-              [
-                {
-                  "type": "media",
-                  "files": []
                 }
               ]
             ]
@@ -3133,7 +3097,7 @@ function buildBlock(gid, listId, blk, bi) {
     const hasFile=!!(blk.file);
     const embedH = blk.height ? `height:${blk.height}px;` : '';
     const vidContent = hasFile
-      ? `<video controls src="${blk.file}" style="width:100%;display:block;border:1px solid var(--border);${embedH}"></video>`
+      ? `<video controls autoplay loop muted playsinline src="${blk.file}" style="width:100%;display:block;border:1px solid var(--border);${embedH}"></video>`
       : !hu ? `<div class="no-embed">${editMode?'Paste URL or upload MP4 below':'No video'}</div>`
       : eu ? `<div class="video-wrap"><iframe src="${eu}" allowfullscreen></iframe></div>`
       : `<div class="no-embed">Bad URL</div>`;
@@ -3857,7 +3821,7 @@ function buildColBlock(gid, listId, bi, ci, blk, bii) {
     const eu=blk.url?toEmbed(blk.url):null; const hu=!!(blk.url&&blk.url.trim());
     const hasFile=!!(blk.file);
     const vidContent = hasFile
-      ? `<video controls src="${blk.file}" style="width:100%;display:block;border:1px solid var(--border);${blk.height?'height:'+blk.height+'px':''}"></video>`
+      ? `<video controls autoplay loop muted playsinline src="${blk.file}" style="width:100%;display:block;border:1px solid var(--border);${blk.height?'height:'+blk.height+'px':''}"></video>`
       : !hu ? `<div class="no-embed">${editMode?'Paste URL or upload MP4':'No video'}</div>`
       : eu ? `<div class="video-wrap"><iframe src="${eu}" allowfullscreen></iframe></div>`
       : `<div class="no-embed">Bad URL</div>`;
