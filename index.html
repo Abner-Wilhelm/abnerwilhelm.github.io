@@ -2012,14 +2012,14 @@ const DEFS = [
   {
     "id": "g-mythbound",
     "title": "Mythbound",
-    "studio": "Skaldforge",
+    "studio": "Skaldforge — FIEA",
     "year": "2026",
     "role": "Lead Technical Designer",
     "duration": "December 2025 – Present",
     "genre": "Multiplayer Arena Brawler",
     "engine": "Unreal Engine 5.7",
     "status": "In Development",
-    "desc": "Mythbound is a multiplayer arena brawler developed at Skaldforge. As Lead Technical Designer I own networked ability systems in GAS, design each character's kit around five systemic pillars, conduct code reviews, and bridge the gap between engineering and design.",
+    "desc": "Mythbound is a multiplayer arena brawler developed at Skaldforge, a team at FIEA (Florida Interactive Entertainment Academy). As Lead Technical Designer I own networked ability systems in GAS, design each character's kit around five systemic pillars, conduct code reviews, and bridge the gap between engineering and design.",
     "tags": [
       "multiplayer",
       "unreal engine 5",
@@ -2046,22 +2046,6 @@ const DEFS = [
           },
           {
             "type": "sub-header",
-            "label": "Projectile System — Base Class"
-          },
-          {
-            "type": "section",
-            "layout": "one-two",
-            "cols": [
-              [
-                {
-                  "type": "text",
-                  "content": "Built a replicated base projectile class in GAS that handles spawn, travel, collision, and effect application. Child classes override only what's unique to them — travel speed, homing behavior, hit effects — while replication, cooldown tracking, and prediction come for free from the base. Adding a new projectile means writing one class instead of rebuilding the full pipeline each time."
-                }
-              ]
-            ]
-          },
-          {
-            "type": "sub-header",
             "label": "Ground Slam"
           },
           {
@@ -2071,7 +2055,7 @@ const DEFS = [
               [
                 {
                   "type": "text",
-                  "content": "Ground Slam has two variants — airborne and grounded — built on the same base class. The airborne version activates mid-air and locks the player into a dive; the grounded version is shorter-range with a faster activation window. On impact, a GAS Gameplay Effect applies an AoE attribute change to all targets in range, server-authoritative with cosmetic prediction on the client. The two-phase input (activate in air → impact) required careful tag gating so the ability can't be cancelled once committed. The shared base meant the networked impact logic didn't need to be written twice — child classes only define targeting radius and activation tags."
+                  "content": "Ground Slam is height-independent, meaning it can trigger from any altitude while keeping the visuals fluid and contextually appropriate. Damage, knockback force, and area of effect scale dynamically with height, implemented through Gameplay Cues in GAS to handle both the visual and damage logic cleanly."
                 }
               ],
               [
@@ -2094,7 +2078,7 @@ const DEFS = [
               [
                 {
                   "type": "text",
-                  "content": "The Grapple targets a valid anchor point within range and pulls the player toward it using networked movement prediction. Mid-flight, the player can activate other abilities — requiring the system to handle ability chaining while the character is in a non-standard locomotion state. Server reconciliation handles desync edge cases when latency causes the anchor point to become invalid after activation."
+                  "content": "Grapple supports a max range and works against any World Dynamic or World Static surface. Rather than pushing position updates through Event Tick, it uses Launch Character to apply a calculated velocity. The math in GA_Grapple derives the needed force from the distance, an optimal travel speed, and a clamped min/max duration. This keeps performance solid while enabling players to chain momentum between grapple points."
                 }
               ],
               [
@@ -2102,98 +2086,6 @@ const DEFS = [
                   "type": "embed",
                   "url": "",
                   "file": "assets/videos/Grapple.webm"
-                }
-              ]
-            ]
-          },
-          {
-            "type": "sub-header",
-            "label": "Lightning Projectile"
-          },
-          {
-            "type": "section",
-            "layout": "one-two",
-            "cols": [
-              [
-                {
-                  "type": "text",
-                  "content": "Fast-traveling projectile with a chained secondary hit — on impact it releases a second bolt toward the nearest target within a small radius. Built on the base projectile class with a custom overlap check on hit. GAS handles the secondary effect application as a separate Gameplay Effect triggered by the first impact."
-                }
-              ],
-              [
-                {
-                  "type": "embed",
-                  "url": "",
-                  "file": "assets/videos/LightningProjectile.webm"
-                }
-              ]
-            ]
-          },
-          {
-            "type": "sub-header",
-            "label": "Piercing Projectile"
-          },
-          {
-            "type": "section",
-            "layout": "one-two",
-            "cols": [
-              [
-                {
-                  "type": "text",
-                  "content": "Short-range high-velocity projectile with near-instant travel time. Intended for an aggressive in-your-face character — the damage is front-loaded with no secondary effect, rewarding accurate aim at close range. GAS tags prevent it from activating during other commitment windows like Ground Slam."
-                }
-              ],
-              [
-                {
-                  "type": "embed",
-                  "url": "",
-                  "file": "assets/videos/PiercingProjectile.webm"
-                }
-              ]
-            ]
-          },
-          {
-            "type": "sub-header",
-            "label": "Wind Charge"
-          },
-          {
-            "type": "section",
-            "layout": "one-two",
-            "cols": [
-              [
-                {
-                  "type": "text",
-                  "content": "Charge-up ability where holding the input builds a Gameplay Attribute value server-side. On release, the accumulated charge determines the push force applied to nearby targets via a radial Gameplay Effect. Latency compensation was critical here — the client shows charge progress locally while the server is the authority on release timing and actual force value."
-                }
-              ],
-              [
-                {
-                  "type": "embed",
-                  "url": "",
-                  "file": "assets/videos/WindCharge.webm"
-                }
-              ]
-            ]
-          },
-          {
-            "type": "sub-header",
-            "label": "Gravebind"
-          },
-          {
-            "type": "section",
-            "layout": "one-two",
-            "cols": [
-              [
-                {
-                  "type": "text",
-                  "content": "Gravebind is a damage-over-time projectile that leverages GAS Effects. On impact it spawns a lingering zone — any player that enters the area receives a stacking DoT and movement speed slow, both applied as duration-based Gameplay Effects with server-authoritative tick rates. The zone's lifetime, tick interval, and effect magnitudes are all data-driven through GAS effect assets."
-                }
-              ],
-              [
-                {
-                  "type": "embed",
-                  "url": "",
-                  "file": "assets/videos/Gravebind.webm"
                 }
               ]
             ]
@@ -2222,6 +2114,114 @@ const DEFS = [
             ]
           },
           {
+            "type": "sub-header",
+            "label": "Projectile System — Base Class"
+          },
+          {
+            "type": "section",
+            "layout": "one-two",
+            "cols": [
+              [
+                {
+                  "type": "text",
+                  "content": "Built a replicated base projectile class in GAS that handles spawn, travel, collision, and effect application. Child classes override only what's unique to them — travel speed, homing behavior, hit effects — while replication, cooldown tracking, and prediction come for free from the base. Adding a new projectile means writing one class instead of rebuilding the full pipeline each time."
+                }
+              ]
+            ]
+          },
+          {
+            "type": "sub-header",
+            "label": "Projectile — Chaining Projectile"
+          },
+          {
+            "type": "section",
+            "layout": "one-two",
+            "cols": [
+              [
+                {
+                  "type": "text",
+                  "content": "On hit, the projectile arcs to nearby enemies within range, applying diminishing returns for each additional target hit in the chain. A tracking system prevents any enemy from being hit more than once per chain. Enemies within range are also stunned on the initial impact."
+                }
+              ],
+              [
+                {
+                  "type": "embed",
+                  "url": "",
+                  "file": "assets/videos/LightningProjectile.webm"
+                }
+              ]
+            ]
+          },
+          {
+            "type": "sub-header",
+            "label": "Projectile — Piercing Projectile"
+          },
+          {
+            "type": "section",
+            "layout": "one-two",
+            "cols": [
+              [
+                {
+                  "type": "text",
+                  "content": "Infinitely pierces through enemies and applies the Hex status effect on each hit. Hexed targets take increased damage from all sources, rewarding players who land the shot before following up."
+                }
+              ],
+              [
+                {
+                  "type": "embed",
+                  "url": "",
+                  "file": "assets/videos/PiercingProjectile.webm"
+                }
+              ]
+            ]
+          },
+          {
+            "type": "sub-header",
+            "label": "Projectile — AOE DOT Projectile"
+          },
+          {
+            "type": "section",
+            "layout": "one-two",
+            "cols": [
+              [
+                {
+                  "type": "text",
+                  "content": "Leaves a persistent area on impact — either on an enemy hit or at the point of world collision. The zone deals damage over time and slows players within it. Hitting an enemy directly applies a separate, stronger GAS effect that immediately slows them more severely than the zone alone, rewarding accurate skillshots and adding a risk/reward layer to how players engage with it."
+                }
+              ],
+              [
+                {
+                  "type": "embed",
+                  "url": "",
+                  "file": "assets/videos/Gravebind.webm"
+                }
+              ]
+            ]
+          },
+          {
+            "type": "sub-header",
+            "label": "Projectile — Knockback Projectile"
+          },
+          {
+            "type": "section",
+            "layout": "one-two",
+            "cols": [
+              [
+                {
+                  "type": "text",
+                  "content": "A projectile that detonates after a short delay, launching any player caught in the radius. It functions as both an offensive and defensive tool — usable to send enemies flying or to burst yourself out of a bad position."
+                }
+              ],
+              [
+                {
+                  "type": "embed",
+                  "url": "",
+                  "file": "assets/videos/WindCharge.webm"
+                }
+              ]
+            ]
+          },
+          {
             "type": "subsection-header",
             "label": "Applied Effects System"
           },
@@ -2233,6 +2233,18 @@ const DEFS = [
                 {
                   "type": "text",
                   "content": "Gameplay Effects across the roster are authored as data assets — designers specify magnitude, duration, stacking rules, and tag requirements without touching code. The system supports instant, duration-based, and infinite effects with stack caps and removal conditions. Built to let designers author new effects independently once the base classes were established."
+                },
+                {
+                  "type": "media",
+                  "files": [
+                    "assets/images/gaseffectapplication.png"
+                  ],
+                  "meta": {
+                    "0": {
+                      "caption": "ApplyEffectsToPlayer — resolves both the dealing and receiving player's Ability System Components, loops through a Gameplay Effect Struct array, validates tags, checks duration, and applies each effect to the correct target.",
+                      "fit": "contain"
+                    }
+                  }
                 }
               ]
             ]
