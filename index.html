@@ -2116,20 +2116,8 @@ const DEFS = [
             ]
           },
           {
-            "type": "sub-header",
-            "label": "Projectile System — Base Class"
-          },
-          {
-            "type": "section",
-            "layout": "one-two",
-            "cols": [
-              [
-                {
-                  "type": "text",
-                  "content": "Built a replicated base projectile class in GAS that handles spawn, travel, collision, and effect application. Child classes override only what's unique to them — travel speed, homing behavior, hit effects — while replication, cooldown tracking, and prediction come for free from the base. Adding a new projectile means writing one class instead of rebuilding the full pipeline each time."
-                }
-              ]
-            ]
+            "type": "text",
+            "content": "All projectiles inherit from a shared replicated base class that handles spawn, travel, collision, and effect application. Child classes override only what's unique — travel speed, homing behavior, hit effects — while replication, cooldown tracking, and prediction come for free. Adding a new projectile means writing one class instead of rebuilding the full pipeline each time."
           },
           {
             "type": "sub-header",
