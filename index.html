@@ -2282,6 +2282,29 @@ const DEFS = [
                 }
               ]
             ]
+          },
+          {
+            "type": "subsection-header",
+            "label": "Objective Logic — Relic Rush"
+          },
+          {
+            "type": "section",
+            "layout": "one-two",
+            "cols": [
+              [
+                {
+                  "type": "text",
+                  "content": "Built the core objective logic for Mythbound's premier gamemode, Relic Rush. A relic spawns at a neutral point and must be carried to one of the enemy team's three goals. Destroying a goal respawns the relic; destroying all three eliminates that team's respawns.\n\nThe relic's state — dropped, held, or thrown — replicates across all clients with full visual sync. Ownership changes, physics handoffs, and mid-air interceptions all route through the server to prevent desync.\n\nThe HUD reflects team-relative context dynamically: carriers see enemy goal markers, teammates of the carrier see goal markers plus an escort prompt, opponents see a kill indicator on the carrier and defend markers on their own goals, and a neutral dropped state shows a take prompt to all players."
+                }
+              ],
+              [
+                {
+                  "type": "embed",
+                  "url": "",
+                  "file": "assets/videos/objectiveUI.webm"
+                }
+              ]
+            ]
           }
         ]
       },
