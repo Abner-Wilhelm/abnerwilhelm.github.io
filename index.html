@@ -597,7 +597,7 @@ body{cursor:none;}
 
 /* ── PROJECT BANNER ───────────────────────────── */
 .proj-banner{width:100%;aspect-ratio:21/6;background:var(--surface);border:1px solid var(--border);position:relative;overflow:hidden;margin-bottom:40px;}
-.proj-banner img{width:100%;height:100%;object-fit:cover;display:block;}
+.proj-banner img,.proj-banner video{width:100%;height:100%;object-fit:cover;display:block;pointer-events:none;}
 .proj-banner-placeholder{position:absolute;inset:0;display:flex;flex-direction:column;align-items:center;justify-content:center;gap:8px;color:var(--muted);font-size:10px;letter-spacing:.15em;text-transform:uppercase;}
 .proj-banner-upload{display:none;padding:6px 14px;border:1px solid var(--border2);background:transparent;color:var(--muted);font-family:var(--ff-m);font-size:9px;letter-spacing:.12em;text-transform:uppercase;cursor:crosshair;transition:all .2s;margin-top:8px;}
 .proj-banner-upload:hover{border-color:var(--accent);color:var(--accent);}
@@ -1264,6 +1264,7 @@ const DEFS = [
       "team project"
     ],
     "thumb": "assets/thumbs/veilwood.webm",
+    "banner": "assets/thumbs/veilwood.webm",
     "bg": "#080a06",
     "ac": "#1a2808",
     "pr": "#406020",
@@ -2027,7 +2028,8 @@ const DEFS = [
       "brawler",
       "team project"
     ],
-    "thumb": "",
+    "thumb": "assets/thumbs/mythbound.webm",
+    "banner": "assets/thumbs/mythbound.webm",
     "bg": "#0a0610",
     "ac": "#1a0a2a",
     "pr": "#7030c0",
@@ -2498,6 +2500,7 @@ const DEFS = [
       "technical design"
     ],
     "thumb": "assets/thumbs/chess-shifter.webm",
+    "banner": "assets/thumbs/chess-shifter.webm",
     "bg": "#080808",
     "ac": "#282828",
     "pr": "#909090",
@@ -2901,8 +2904,11 @@ function renderModal(g) {
   const prev = idx > 0 ? games[idx-1] : null;
   const next = idx < games.length-1 ? games[idx+1] : null;
 
+  const bannerIsVideo = g.banner && /\.(webm|mp4)$/i.test(g.banner);
   const bannerHtml = g.banner
-    ? `<div class="proj-banner"><img src="${g.banner}" alt=""><button class="proj-banner-upload" onclick="changeBanner('${g.id}')">↺ Change banner</button></div>`
+    ? `<div class="proj-banner">${bannerIsVideo
+        ? `<video src="${g.banner}" autoplay loop muted playsinline style="width:100%;height:100%;object-fit:cover;display:block;"></video>`
+        : `<img src="${g.banner}" alt="">`}<button class="proj-banner-upload" onclick="changeBanner('${g.id}')">↺ Change banner</button></div>`
     : `<div class="proj-banner"><div class="proj-banner-placeholder"><span>No banner image</span><button class="proj-banner-upload" onclick="changeBanner('${g.id}')">↑ Upload banner</button></div></div>`;
 
   // Tab-based or flat content
