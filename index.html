@@ -190,7 +190,7 @@ footer{padding:28px 48px;border-top:1px solid var(--border);display:flex;justify
 .pm-nav-links a:hover,.pm-nav-links button:hover{color:var(--text);}
 .pm-nav-links a:hover::after,.pm-nav-links button:hover::after{width:100%;}
 .pm-nav-links .pm-current{color:var(--accent);font-family:var(--ff-d);font-size:18px;font-weight:300;}
-.pm-body{max-width:860px;margin:0 auto;padding:64px 48px 80px;width:100%;}
+.pm-body{max-width:1100px;margin:0 auto;padding:64px 48px 80px;width:100%;}
 
 /* Project header */
 .ph-eyebrow{font-size:10px;letter-spacing:.25em;text-transform:uppercase;color:var(--accent);margin-bottom:10px;}
@@ -313,6 +313,10 @@ body:not(.edit-mode) .video-wrap{
   box-shadow:0 4px 24px rgba(0,0,0,.5), 0 0 0 1px rgba(95,180,216,.06);
   border-radius:2px;
   overflow:hidden;
+}
+body:not(.edit-mode) video.lazy-video{
+  box-shadow:0 4px 24px rgba(0,0,0,.5), 0 0 0 1px rgba(95,180,216,.06);
+  border-radius:2px;
 }
 
 /* Reflection upgraded */
@@ -1317,8 +1321,12 @@ const DEFS = [
             "label": "NPC State Management"
           },
           {
+            "type": "text",
+            "content": "I created a scheduling and location system for Town NPCs built on three concepts: Destinations (places NPCs can go), Schedules (a Time, a Place, and an Action), and Sublocations (sub-points within each destination).\n\nDepending on the NPC's action (Working, At Home, Idle), they pick a different sublocation within their target Destination:\n• Working — they move to the work sublocation and alert the shop object that they're now staffing it.\n• At Home — they don't take up occupancy at the home sublocation, allowing multiple NPCs to live in the same house without conflict (the player can't enter NPC homes, so this stays invisible).\n• Idle — they pick a random sublocation within the Destination and go there."
+          },
+          {
             "type": "section",
-            "layout": "one-two",
+            "layout": "half",
             "cols": [
               [
                 {
@@ -1332,10 +1340,6 @@ const DEFS = [
                       "fit": "contain"
                     }
                   }
-                },
-                {
-                  "type": "text",
-                  "content": "I created a scheduling and location system for Town NPCs built on three concepts: Destinations (places NPCs can go), Schedules (a Time, a Place, and an Action), and Sublocations (sub-points within each destination).\n\nDepending on the NPC's action (Working, At Home, Idle), they pick a different sublocation within their target Destination:\n• Working — they move to the work sublocation and alert the shop object that they're now staffing it.\n• At Home — they don't take up occupancy at the home sublocation, allowing multiple NPCs to live in the same house without conflict (the player can't enter NPC homes, so this stays invisible).\n• Idle — they pick a random sublocation within the Destination and go there."
                 }
               ],
               [
@@ -3097,7 +3101,7 @@ function buildBlock(gid, listId, blk, bi) {
     const hasFile=!!(blk.file);
     const embedH = blk.height ? `height:${blk.height}px;` : '';
     const vidContent = hasFile
-      ? `<video controls autoplay loop muted playsinline src="${blk.file}" style="width:100%;display:block;border:1px solid var(--border);${embedH}"></video>`
+      ? `<video class="lazy-video" controls loop muted playsinline src="${blk.file}" style="width:100%;display:block;border:1px solid var(--border);${embedH}"></video>`
       : !hu ? `<div class="no-embed">${editMode?'Paste URL or upload MP4 below':'No video'}</div>`
       : eu ? `<div class="video-wrap"><iframe src="${eu}" allowfullscreen></iframe></div>`
       : `<div class="no-embed">Bad URL</div>`;
@@ -3821,7 +3825,7 @@ function buildColBlock(gid, listId, bi, ci, blk, bii) {
     const eu=blk.url?toEmbed(blk.url):null; const hu=!!(blk.url&&blk.url.trim());
     const hasFile=!!(blk.file);
     const vidContent = hasFile
-      ? `<video controls autoplay loop muted playsinline src="${blk.file}" style="width:100%;display:block;border:1px solid var(--border);${blk.height?'height:'+blk.height+'px':''}"></video>`
+      ? `<video class="lazy-video" controls loop muted playsinline src="${blk.file}" style="width:100%;display:block;border:1px solid var(--border);${blk.height?'height:'+blk.height+'px':''}"></video>`
       : !hu ? `<div class="no-embed">${editMode?'Paste URL or upload MP4':'No video'}</div>`
       : eu ? `<div class="video-wrap"><iframe src="${eu}" allowfullscreen></iframe></div>`
       : `<div class="no-embed">Bad URL</div>`;
@@ -4217,6 +4221,24 @@ loadFields();
 loadAccentColor();
 renderCards();
 renderTechStack();
+
+// ── Lazy autoplay: play/pause videos when they scroll into/out of view ──
+const modalEl = document.getElementById('proj-modal');
+const videoObserver = new IntersectionObserver((entries) => {
+  entries.forEach(e => {
+    if (e.isIntersecting) { e.target.play().catch(()=>{}); }
+    else { e.target.pause(); }
+  });
+}, { root: modalEl, threshold: 0.35 });
+function observeVideos() {
+  if (!modalEl) return;
+  modalEl.querySelectorAll('video.lazy-video').forEach(v => {
+    if (!v.dataset.observed) { v.dataset.observed = '1'; videoObserver.observe(v); }
+  });
+}
+if (modalEl) {
+  new MutationObserver(observeVideos).observe(modalEl, { childList: true, subtree: true });
+}
 </script><input type="file" accept="audio/*" style="display: none;"><input type="file" accept="image/*" style="display: none;"><input type="file" accept="image/*,image/gif" multiple="" style="display: none;"><input type="file" accept="audio/*" style="display: none;"><input type="file" accept="video/mp4,video/*" style="display: none;">
 
 
