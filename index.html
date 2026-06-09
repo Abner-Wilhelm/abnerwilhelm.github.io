@@ -1195,6 +1195,309 @@ if (!EDIT_MODE_ENABLED) {
 // ════════════════════════════════════════════════════════
 const DEFS = [
   {
+    "id": "g-mythbound",
+    "title": "Mythbound",
+    "studio": "Skaldforge — FIEA",
+    "year": "2026",
+    "role": "Lead Technical Designer",
+    "duration": "December 2025 – Present",
+    "genre": "Multiplayer Arena Brawler",
+    "engine": "Unreal Engine 5.7",
+    "status": "In Development",
+    "desc": "Mythbound is a multiplayer arena brawler developed at Skaldforge, a team at FIEA (Florida Interactive Entertainment Academy). As Lead Technical Designer I own networked ability systems in GAS, design each character's kit around five systemic pillars, conduct code reviews, and bridge the gap between engineering and design.",
+    "tags": [
+      "multiplayer",
+      "unreal engine 5",
+      "GAS",
+      "brawler",
+      "team project"
+    ],
+    "thumb": "assets/thumbs/mythbound.webm",
+    "banner": "assets/thumbs/mythbound.webm",
+    "bg": "#0a0804",
+    "ac": "#1a1408",
+    "pr": "#d4a84b",
+    "tabs": [
+      {
+        "id": "tab-mb-prog",
+        "label": "Programming",
+        "blocks": [
+          {
+            "type": "subsection-header",
+            "label": "Networked GAS Abilities"
+          },
+          {
+            "type": "text",
+            "content": "All abilities are built on Unreal's Gameplay Ability System (GAS) with full replication support. The base classes handle prediction, activation tags, cooldown tracking, and effect application. Child abilities only need to define what makes them unique. This kept the codebase scalable as the character roster grew and made code reviews straightforward since every ability followed the same contract."
+          },
+          {
+            "type": "sub-header",
+            "label": "Ground Slam"
+          },
+          {
+            "type": "section",
+            "layout": "one-two",
+            "cols": [
+              [
+                {
+                  "type": "text",
+                  "content": "Ground Slam is height-independent, meaning it can trigger from any altitude while keeping the visuals fluid and contextually appropriate. Damage, knockback force, and area of effect scale dynamically with height, implemented through Gameplay Cues in GAS to handle both the visual and damage logic cleanly."
+                }
+              ],
+              [
+                {
+                  "type": "embed",
+                  "url": "",
+                  "file": "assets/videos/GroundSlam.webm"
+                }
+              ]
+            ]
+          },
+          {
+            "type": "sub-header",
+            "label": "Grapple"
+          },
+          {
+            "type": "section",
+            "layout": "one-two",
+            "cols": [
+              [
+                {
+                  "type": "text",
+                  "content": "Grapple supports a max range and works against any World Dynamic or World Static surface. Rather than pushing position updates through Event Tick, it uses Launch Character to apply a calculated velocity. The math in GA_Grapple derives the needed force from the distance, an optimal travel speed, and a clamped min/max duration. This keeps performance solid while enabling players to chain momentum between grapple points."
+                }
+              ],
+              [
+                {
+                  "type": "embed",
+                  "url": "",
+                  "file": "assets/videos/Grapple.webm"
+                }
+              ]
+            ]
+          },
+          {
+            "type": "sub-header",
+            "label": "Hex Teleport"
+          },
+          {
+            "type": "section",
+            "layout": "one-two",
+            "cols": [
+              [
+                {
+                  "type": "text",
+                  "content": "Places a hex marker at a target location, then allows the player to teleport to it within a time window. Server validates the destination on placement and again on activation to prevent out-of-bounds teleports. A GAS cooldown tag gates re-activation, and the visual/audio feedback is broadcast to all clients through a replicated GameplayCue."
+                }
+              ],
+              [
+                {
+                  "type": "embed",
+                  "url": "",
+                  "file": "assets/videos/hexaport.webm"
+                }
+              ]
+            ]
+          },
+          {
+            "type": "text",
+            "content": "All projectiles inherit from a shared replicated base class that handles spawn, travel, collision, and effect application. Child classes override only what makes them unique (travel speed, homing behavior, hit effects) while replication, cooldown tracking, and prediction come for free. Adding a new projectile means writing one class instead of rebuilding the full pipeline each time."
+          },
+          {
+            "type": "sub-header",
+            "label": "Projectile — Chaining Projectile"
+          },
+          {
+            "type": "section",
+            "layout": "one-two",
+            "cols": [
+              [
+                {
+                  "type": "text",
+                  "content": "On hit, the projectile arcs to nearby enemies within range, applying diminishing returns for each additional target hit in the chain. A tracking system prevents any enemy from being hit more than once per chain. Enemies within range are also stunned on the initial impact."
+                }
+              ],
+              [
+                {
+                  "type": "embed",
+                  "url": "",
+                  "file": "assets/videos/LightningProjectile.webm"
+                }
+              ]
+            ]
+          },
+          {
+            "type": "sub-header",
+            "label": "Projectile — Piercing Projectile"
+          },
+          {
+            "type": "section",
+            "layout": "one-two",
+            "cols": [
+              [
+                {
+                  "type": "text",
+                  "content": "Infinitely pierces through enemies and applies the Hex status effect on each hit. Hexed targets take increased damage from all sources, rewarding players who land the shot before following up."
+                }
+              ],
+              [
+                {
+                  "type": "embed",
+                  "url": "",
+                  "file": "assets/videos/PiercingProjectile.webm"
+                }
+              ]
+            ]
+          },
+          {
+            "type": "sub-header",
+            "label": "Projectile — AOE DOT Projectile"
+          },
+          {
+            "type": "section",
+            "layout": "one-two",
+            "cols": [
+              [
+                {
+                  "type": "text",
+                  "content": "Leaves a persistent area on impact, either on an enemy hit or at the point of world collision. The zone deals damage over time and slows players within it. Hitting an enemy directly applies a separate, stronger GAS effect that slows them more severely than the zone alone, rewarding accurate skillshots."
+                }
+              ],
+              [
+                {
+                  "type": "embed",
+                  "url": "",
+                  "file": "assets/videos/Gravebind.webm"
+                }
+              ]
+            ]
+          },
+          {
+            "type": "sub-header",
+            "label": "Projectile — Knockback Projectile"
+          },
+          {
+            "type": "section",
+            "layout": "one-two",
+            "cols": [
+              [
+                {
+                  "type": "text",
+                  "content": "A projectile that detonates after a short delay, launching any player caught in the radius. Functions as both an offensive and defensive tool: send enemies flying or burst yourself out of a bad position."
+                }
+              ],
+              [
+                {
+                  "type": "embed",
+                  "url": "",
+                  "file": "assets/videos/WindCharge.webm"
+                }
+              ]
+            ]
+          },
+          {
+            "type": "subsection-header",
+            "label": "Objective Logic — Relic Rush"
+          },
+          {
+            "type": "section",
+            "layout": "one-two",
+            "cols": [
+              [
+                {
+                  "type": "text",
+                  "content": "Built the core objective logic for Mythbound's premier gamemode, Relic Rush. A relic spawns at a neutral point and must be carried to one of the enemy team's three goals. Destroying a goal respawns the relic; destroying all three eliminates that team's respawns.\n\nThe relic's state (dropped, held, or thrown) replicates across all clients with full visual sync. Ownership changes, physics handoffs, and mid-air interceptions all route through the server to prevent desync.\n\nThe HUD reflects team-relative context dynamically: carriers see enemy goal markers, teammates see goal markers plus an escort prompt, opponents see a kill indicator on the carrier and defend markers on their own goals, and a neutral dropped state shows a take prompt to all players."
+                }
+              ],
+              [
+                {
+                  "type": "embed",
+                  "url": "",
+                  "file": "assets/videos/objectiveUI.webm"
+                }
+              ]
+            ]
+          },
+          {
+            "type": "subsection-header",
+            "label": "Applied Effects System"
+          },
+          {
+            "type": "section",
+            "layout": "full",
+            "cols": [
+              [
+                {
+                  "type": "text",
+                  "content": "Gameplay Effects across the roster are authored as data assets. Designers specify magnitude, duration, stacking rules, and tag requirements without touching code. The system supports instant, duration-based, and infinite effects with stack caps and removal conditions. Built to let designers author new effects independently once the base classes were established."
+                },
+                {
+                  "type": "media",
+                  "files": [
+                    "assets/images/gaseffectapplication.png"
+                  ],
+                  "meta": {
+                    "0": {
+                      "caption": "ApplyEffectsToPlayer — resolves both the dealing and receiving player's Ability System Components, loops through a Gameplay Effect Struct array, validates tags, checks duration, and applies each effect to the correct target.",
+                      "fit": "contain"
+                    }
+                  }
+                }
+              ]
+            ]
+          },
+          {
+            "type": "subsection-header",
+            "label": "Networked Sound System"
+          },
+          {
+            "type": "section",
+            "layout": "one-two",
+            "cols": [
+              [
+                {
+                  "type": "media",
+                  "files": [
+                    "assets/images/playgamesound.png"
+                  ],
+                  "meta": {
+                    "0": {
+                      "caption": "PlayGameSound Blueprint node. Accepts a sound asset, world location, 2D flag, replication type, and instigator.",
+                      "fit": "contain"
+                    }
+                  }
+                }
+              ],
+              [
+                {
+                  "type": "text",
+                  "content": "Built a C++ networked sound system to give designers a clean node for playing replicated audio without bloating the project with Gameplay Cues. The PlayGameSound node lets designers specify a sound asset, location, 2D/3D mode, and replication scope (team, all, etc.) directly in Blueprint. Under the hood, the system routes sound relay requests through the GameState, since it is always replicated, and each player has a sound receiver ActorComponent that processes incoming requests and plays audio with proper attenuation on their client."
+                }
+              ]
+            ]
+          },
+          {
+            "type": "subsection-header",
+            "label": "Team Respawn Logic"
+          },
+          {
+            "type": "section",
+            "layout": "full",
+            "cols": [
+              [
+                {
+                  "type": "text",
+                  "content": "Server-side respawn timer per player with spectator state during the countdown. Spawn point selection uses a scoring function that weighs distance from enemies and proximity to teammates, preventing spawn-trapping in small arena layouts. Timer and spawn state are replicated to the relevant client's HUD."
+                }
+              ]
+            ]
+          }
+        ]
+      }
+    ],
+    "reflection": "Leading the technical design on Mythbound meant owning both the code and the design framework simultaneously. The five pillars gave the team a shared vocabulary for evaluating abilities. When a move felt too strong, we could point to which pillar it was violating rather than arguing from gut feel. On the technical side, GAS is powerful but has a steep ramp; the time I spent on the base classes paid off every time a new ability took hours instead of days to implement."
+  },
+  {
     "id": "g1",
     "title": "VeilWood",
     "studio": "Chaos Cabin LLC",
@@ -1613,309 +1916,6 @@ const DEFS = [
       }
     ],
     "reflection": "[Write your reflection here — what did you learn across programming, level design, and composition? What challenges did you overcome, and what would you approach differently?]"
-  },
-  {
-    "id": "g-mythbound",
-    "title": "Mythbound",
-    "studio": "Skaldforge — FIEA",
-    "year": "2026",
-    "role": "Lead Technical Designer",
-    "duration": "December 2025 – Present",
-    "genre": "Multiplayer Arena Brawler",
-    "engine": "Unreal Engine 5.7",
-    "status": "In Development",
-    "desc": "Mythbound is a multiplayer arena brawler developed at Skaldforge, a team at FIEA (Florida Interactive Entertainment Academy). As Lead Technical Designer I own networked ability systems in GAS, design each character's kit around five systemic pillars, conduct code reviews, and bridge the gap between engineering and design.",
-    "tags": [
-      "multiplayer",
-      "unreal engine 5",
-      "GAS",
-      "brawler",
-      "team project"
-    ],
-    "thumb": "assets/thumbs/mythbound.webm",
-    "banner": "assets/thumbs/mythbound.webm",
-    "bg": "#0a0804",
-    "ac": "#1a1408",
-    "pr": "#d4a84b",
-    "tabs": [
-      {
-        "id": "tab-mb-prog",
-        "label": "Programming",
-        "blocks": [
-          {
-            "type": "subsection-header",
-            "label": "Networked GAS Abilities"
-          },
-          {
-            "type": "text",
-            "content": "All abilities are built on Unreal's Gameplay Ability System (GAS) with full replication support. The base classes handle prediction, activation tags, cooldown tracking, and effect application. Child abilities only need to define what makes them unique. This kept the codebase scalable as the character roster grew and made code reviews straightforward since every ability followed the same contract."
-          },
-          {
-            "type": "sub-header",
-            "label": "Ground Slam"
-          },
-          {
-            "type": "section",
-            "layout": "one-two",
-            "cols": [
-              [
-                {
-                  "type": "text",
-                  "content": "Ground Slam is height-independent, meaning it can trigger from any altitude while keeping the visuals fluid and contextually appropriate. Damage, knockback force, and area of effect scale dynamically with height, implemented through Gameplay Cues in GAS to handle both the visual and damage logic cleanly."
-                }
-              ],
-              [
-                {
-                  "type": "embed",
-                  "url": "",
-                  "file": "assets/videos/GroundSlam.webm"
-                }
-              ]
-            ]
-          },
-          {
-            "type": "sub-header",
-            "label": "Grapple"
-          },
-          {
-            "type": "section",
-            "layout": "one-two",
-            "cols": [
-              [
-                {
-                  "type": "text",
-                  "content": "Grapple supports a max range and works against any World Dynamic or World Static surface. Rather than pushing position updates through Event Tick, it uses Launch Character to apply a calculated velocity. The math in GA_Grapple derives the needed force from the distance, an optimal travel speed, and a clamped min/max duration. This keeps performance solid while enabling players to chain momentum between grapple points."
-                }
-              ],
-              [
-                {
-                  "type": "embed",
-                  "url": "",
-                  "file": "assets/videos/Grapple.webm"
-                }
-              ]
-            ]
-          },
-          {
-            "type": "sub-header",
-            "label": "Hex Teleport"
-          },
-          {
-            "type": "section",
-            "layout": "one-two",
-            "cols": [
-              [
-                {
-                  "type": "text",
-                  "content": "Places a hex marker at a target location, then allows the player to teleport to it within a time window. Server validates the destination on placement and again on activation to prevent out-of-bounds teleports. A GAS cooldown tag gates re-activation, and the visual/audio feedback is broadcast to all clients through a replicated GameplayCue."
-                }
-              ],
-              [
-                {
-                  "type": "embed",
-                  "url": "",
-                  "file": "assets/videos/hexaport.webm"
-                }
-              ]
-            ]
-          },
-          {
-            "type": "text",
-            "content": "All projectiles inherit from a shared replicated base class that handles spawn, travel, collision, and effect application. Child classes override only what makes them unique (travel speed, homing behavior, hit effects) while replication, cooldown tracking, and prediction come for free. Adding a new projectile means writing one class instead of rebuilding the full pipeline each time."
-          },
-          {
-            "type": "sub-header",
-            "label": "Projectile — Chaining Projectile"
-          },
-          {
-            "type": "section",
-            "layout": "one-two",
-            "cols": [
-              [
-                {
-                  "type": "text",
-                  "content": "On hit, the projectile arcs to nearby enemies within range, applying diminishing returns for each additional target hit in the chain. A tracking system prevents any enemy from being hit more than once per chain. Enemies within range are also stunned on the initial impact."
-                }
-              ],
-              [
-                {
-                  "type": "embed",
-                  "url": "",
-                  "file": "assets/videos/LightningProjectile.webm"
-                }
-              ]
-            ]
-          },
-          {
-            "type": "sub-header",
-            "label": "Projectile — Piercing Projectile"
-          },
-          {
-            "type": "section",
-            "layout": "one-two",
-            "cols": [
-              [
-                {
-                  "type": "text",
-                  "content": "Infinitely pierces through enemies and applies the Hex status effect on each hit. Hexed targets take increased damage from all sources, rewarding players who land the shot before following up."
-                }
-              ],
-              [
-                {
-                  "type": "embed",
-                  "url": "",
-                  "file": "assets/videos/PiercingProjectile.webm"
-                }
-              ]
-            ]
-          },
-          {
-            "type": "sub-header",
-            "label": "Projectile — AOE DOT Projectile"
-          },
-          {
-            "type": "section",
-            "layout": "one-two",
-            "cols": [
-              [
-                {
-                  "type": "text",
-                  "content": "Leaves a persistent area on impact, either on an enemy hit or at the point of world collision. The zone deals damage over time and slows players within it. Hitting an enemy directly applies a separate, stronger GAS effect that slows them more severely than the zone alone, rewarding accurate skillshots."
-                }
-              ],
-              [
-                {
-                  "type": "embed",
-                  "url": "",
-                  "file": "assets/videos/Gravebind.webm"
-                }
-              ]
-            ]
-          },
-          {
-            "type": "sub-header",
-            "label": "Projectile — Knockback Projectile"
-          },
-          {
-            "type": "section",
-            "layout": "one-two",
-            "cols": [
-              [
-                {
-                  "type": "text",
-                  "content": "A projectile that detonates after a short delay, launching any player caught in the radius. Functions as both an offensive and defensive tool: send enemies flying or burst yourself out of a bad position."
-                }
-              ],
-              [
-                {
-                  "type": "embed",
-                  "url": "",
-                  "file": "assets/videos/WindCharge.webm"
-                }
-              ]
-            ]
-          },
-          {
-            "type": "subsection-header",
-            "label": "Objective Logic — Relic Rush"
-          },
-          {
-            "type": "section",
-            "layout": "one-two",
-            "cols": [
-              [
-                {
-                  "type": "text",
-                  "content": "Built the core objective logic for Mythbound's premier gamemode, Relic Rush. A relic spawns at a neutral point and must be carried to one of the enemy team's three goals. Destroying a goal respawns the relic; destroying all three eliminates that team's respawns.\n\nThe relic's state (dropped, held, or thrown) replicates across all clients with full visual sync. Ownership changes, physics handoffs, and mid-air interceptions all route through the server to prevent desync.\n\nThe HUD reflects team-relative context dynamically: carriers see enemy goal markers, teammates see goal markers plus an escort prompt, opponents see a kill indicator on the carrier and defend markers on their own goals, and a neutral dropped state shows a take prompt to all players."
-                }
-              ],
-              [
-                {
-                  "type": "embed",
-                  "url": "",
-                  "file": "assets/videos/objectiveUI.webm"
-                }
-              ]
-            ]
-          },
-          {
-            "type": "subsection-header",
-            "label": "Applied Effects System"
-          },
-          {
-            "type": "section",
-            "layout": "full",
-            "cols": [
-              [
-                {
-                  "type": "text",
-                  "content": "Gameplay Effects across the roster are authored as data assets. Designers specify magnitude, duration, stacking rules, and tag requirements without touching code. The system supports instant, duration-based, and infinite effects with stack caps and removal conditions. Built to let designers author new effects independently once the base classes were established."
-                },
-                {
-                  "type": "media",
-                  "files": [
-                    "assets/images/gaseffectapplication.png"
-                  ],
-                  "meta": {
-                    "0": {
-                      "caption": "ApplyEffectsToPlayer — resolves both the dealing and receiving player's Ability System Components, loops through a Gameplay Effect Struct array, validates tags, checks duration, and applies each effect to the correct target.",
-                      "fit": "contain"
-                    }
-                  }
-                }
-              ]
-            ]
-          },
-          {
-            "type": "subsection-header",
-            "label": "Networked Sound System"
-          },
-          {
-            "type": "section",
-            "layout": "one-two",
-            "cols": [
-              [
-                {
-                  "type": "media",
-                  "files": [
-                    "assets/images/playgamesound.png"
-                  ],
-                  "meta": {
-                    "0": {
-                      "caption": "PlayGameSound Blueprint node. Accepts a sound asset, world location, 2D flag, replication type, and instigator.",
-                      "fit": "contain"
-                    }
-                  }
-                }
-              ],
-              [
-                {
-                  "type": "text",
-                  "content": "Built a C++ networked sound system to give designers a clean node for playing replicated audio without bloating the project with Gameplay Cues. The PlayGameSound node lets designers specify a sound asset, location, 2D/3D mode, and replication scope (team, all, etc.) directly in Blueprint. Under the hood, the system routes sound relay requests through the GameState, since it is always replicated, and each player has a sound receiver ActorComponent that processes incoming requests and plays audio with proper attenuation on their client."
-                }
-              ]
-            ]
-          },
-          {
-            "type": "subsection-header",
-            "label": "Team Respawn Logic"
-          },
-          {
-            "type": "section",
-            "layout": "full",
-            "cols": [
-              [
-                {
-                  "type": "text",
-                  "content": "Server-side respawn timer per player with spectator state during the countdown. Spawn point selection uses a scoring function that weighs distance from enemies and proximity to teammates, preventing spawn-trapping in small arena layouts. Timer and spawn state are replicated to the relevant client's HUD."
-                }
-              ]
-            ]
-          }
-        ]
-      }
-    ],
-    "reflection": "Leading the technical design on Mythbound meant owning both the code and the design framework simultaneously. The five pillars gave the team a shared vocabulary for evaluating abilities. When a move felt too strong, we could point to which pillar it was violating rather than arguing from gut feel. On the technical side, GAS is powerful but has a steep ramp; the time I spent on the base classes paid off every time a new ability took hours instead of days to implement."
   },
   {
     "id": "g-chess",
