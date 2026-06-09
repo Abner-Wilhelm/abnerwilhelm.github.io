@@ -170,8 +170,10 @@ section{padding:80px 48px;}
 .resume-sub{font-size:11px;color:var(--muted);}
 
 footer{padding:28px 48px;border-top:1px solid var(--border);display:flex;justify-content:space-between;align-items:center;}
+.footer-left{display:flex;flex-direction:column;gap:4px;}
 .footer-copy{font-size:11px;color:var(--muted);}
 .footer-copy em{color:var(--accent);font-style:normal;}
+.footer-updated{font-size:10px;color:var(--border2);letter-spacing:.08em;}
 .footer-status{display:flex;align-items:center;gap:8px;font-size:11px;color:var(--muted);}
 .status-dot{width:6px;height:6px;border-radius:50%;background:var(--green);animation:pulse 2s ease-in-out infinite;}
 @keyframes pulse{0%,100%{box-shadow:0 0 0 0 rgba(76,175,112,.4);}50%{box-shadow:0 0 0 6px rgba(76,175,112,0);}}
@@ -849,7 +851,7 @@ body:not(.edit-mode) #proj-modal[data-project] .section-container-inner{border-l
   <div class="about-grid">
     <div class="about-text reveal">
       <p><span data-save="ab-p1" contenteditable="false">I'm a technical designer studying at the Florida Interactive Entertainment Academy in Orlando, focused on gameplay programming, systems design, and the bridge between the two.</span></p>
-      <p><span data-save="ab-p2" contenteditable="false">I gravitate toward systems-heavy design — modular, scalable architectures where every piece serves the larger loop. Recently that's meant networked GAS abilities in UE5, ScriptableObject-driven inventories and achievements in Unity, and state-driven AI that has to feel reactive without breaking under pressure.</span></p>
+      <p><span data-save="ab-p2" contenteditable="false">I gravitate toward systems-heavy design: modular, scalable architectures where every piece serves the larger loop. Recently that's meant networked GAS abilities in UE5, ScriptableObject-driven inventories and achievements in Unity, and state-driven AI that has to feel reactive without breaking under pressure.</span></p>
       <p><span data-save="ab-p3" contenteditable="false">Outside of code, I write orchestral-style game music. When a project lets me touch both the systems and the soundtrack, that's the sweet spot.</span></p>
     </div>
     <div class="about-aside reveal">
@@ -858,7 +860,7 @@ body:not(.edit-mode) #proj-modal[data-project] .section-container-inner{border-l
         <ul class="skill-list">
           <li data-save="tool1" contenteditable="false">Unreal Engine 5 (Blueprints + C++)</li>
           <li data-save="tool2" contenteditable="false">Unity (C#)</li>
-          <li data-save="tool3" contenteditable="false">JetBrains Rider + VS Code</li>
+          <li data-save="tool3" contenteditable="false">Visual Studio · VS Code</li>
           <li data-save="tool4" contenteditable="false">Perforce · GitHub</li>
         </ul>
       </div>
@@ -880,7 +882,7 @@ body:not(.edit-mode) #proj-modal[data-project] .section-container-inner{border-l
   <p class="section-label reveal">Let's talk</p>
   <h2 class="section-title reveal">Contact</h2>
   <div class="contact-inner">
-    <p class="contact-desc reveal" data-save="cd" contenteditable="false">Currently studying at FIEA in Orlando. Open to work — internships, collaborations, and conversations about technical design and gameplay programming.</p>
+    <p class="contact-desc reveal" data-save="cd" contenteditable="false">Currently studying at FIEA in Orlando. Open to work: internships, collaborations, and conversations about technical design and gameplay programming.</p>
     <div class="contact-links reveal">
       <a class="cl-row" href="#" onclick="event.preventDefault();const a=['abnerwilhelm','gmail.com'].join('@');location.href='mai'+'lto:'+a;"><span class="cl-plat">Email</span><span class="cl-handle" data-save="cl1" contenteditable="false"><span id="email-display">abnerwilhelm [at] gmail [dot] com</span></span><span class="cl-arr">↗</span></a>
       
@@ -889,14 +891,17 @@ body:not(.edit-mode) #proj-modal[data-project] .section-container-inner{border-l
       
     </div>
     <div class="resume-box reveal">
-      <div><div class="resume-title">Résumé / CV</div><div class="resume-sub" data-save="rsub" contenteditable="false">PDF · Last updated May 2026</div></div>
+      <div><div class="resume-title">Résumé / CV</div><div class="resume-sub" data-save="rsub" contenteditable="false">PDF · Last updated June 2026</div></div>
       <a href="assets/Wilhelm_Resume.pdf" download="Abner_Wilhelm_Resume.pdf" class="btn btn-primary">↓ Download</a>
     </div>
   </div>
 </section>
 
 <footer>
-  <p class="footer-copy">© 2026 <em data-save="fn" contenteditable="false">Abner Wilhelm</em></p>
+  <div class="footer-left">
+    <p class="footer-copy">© 2026 <em data-save="fn" contenteditable="false">Abner Wilhelm</em></p>
+    <p class="footer-updated">Portfolio last updated June 2026</p>
+  </div>
   <div class="footer-status"><div class="status-dot"></div><span data-save="fs" contenteditable="false">available for new projects</span></div>
 </footer>
 
@@ -2462,7 +2467,7 @@ function buildBlock(gid, listId, blk, bi) {
       const ssId = `ss-${listId}-${bi}`;
       const slides = blk.files.map((src,fi) => {
         const m = (blk.meta&&blk.meta[fi])||{};
-        return `<img src="${m.cropped||src}" alt="" data-index="${fi}" onclick="openLB('${m.cropped||src}')" style="display:${fi===0?'block':'none'}">`;
+        return `<img src="${m.cropped||src}" alt="" loading="lazy" data-index="${fi}" onclick="openLB('${m.cropped||src}')" style="display:${fi===0?'block':'none'}">`;
       }).join('');
       const caps = blk.files.map((_,fi) => ((blk.meta&&blk.meta[fi])||{}).caption||'').join('|||');
       const dots = blk.files.map((_,fi) => `<button class="slideshow-dot${fi===0?' active':''}" onclick="ssGo('${ssId}',${fi})"></button>`).join('');
@@ -2484,7 +2489,7 @@ function buildBlock(gid, listId, blk, bi) {
     const hasFile=!!(blk.file);
     const embedH = blk.height ? `height:${blk.height}px;` : '';
     const vidContent = hasFile
-      ? `<video class="lazy-video" controls loop muted playsinline src="${blk.file}" style="width:100%;display:block;border:1px solid var(--border);${embedH}"></video>`
+      ? `<video class="lazy-video" controls loop muted playsinline preload="none" src="${blk.file}" style="width:100%;display:block;border:1px solid var(--border);${embedH}"></video>`
       : !hu ? `<div class="no-embed">${editMode?'Paste URL or upload MP4 below':'No video'}</div>`
       : eu ? `<div class="video-wrap"><iframe src="${eu}" allowfullscreen></iframe></div>`
       : `<div class="no-embed">Bad URL</div>`;
@@ -3212,7 +3217,7 @@ function buildColBlock(gid, listId, bi, ci, blk, bii) {
       const ssId = `ss-${listId}-${bi}-${ci}-${bii}`;
       const slides = blk.files.map((src,fi) => {
         const m = (blk.meta&&blk.meta[fi])||{};
-        return `<img src="${m.cropped||src}" alt="" data-index="${fi}" onclick="openLB('${m.cropped||src}')" style="display:${fi===0?'block':'none'}">`;
+        return `<img src="${m.cropped||src}" alt="" loading="lazy" data-index="${fi}" onclick="openLB('${m.cropped||src}')" style="display:${fi===0?'block':'none'}">`;
       }).join('');
       const caps = blk.files.map((_,fi) => ((blk.meta&&blk.meta[fi])||{}).caption||'').join('|||');
       const dots = blk.files.map((_,fi) => `<button class="slideshow-dot${fi===0?' active':''}" onclick="ssGo('${ssId}',${fi})"></button>`).join('');
@@ -3233,7 +3238,7 @@ function buildColBlock(gid, listId, bi, ci, blk, bii) {
     const eu=blk.url?toEmbed(blk.url):null; const hu=!!(blk.url&&blk.url.trim());
     const hasFile=!!(blk.file);
     const vidContent = hasFile
-      ? `<video class="lazy-video" controls loop muted playsinline src="${blk.file}" style="width:100%;display:block;border:1px solid var(--border);${blk.height?'height:'+blk.height+'px':''}"></video>`
+      ? `<video class="lazy-video" controls loop muted playsinline preload="none" src="${blk.file}" style="width:100%;display:block;border:1px solid var(--border);${blk.height?'height:'+blk.height+'px':''}"></video>`
       : !hu ? `<div class="no-embed">${editMode?'Paste URL or upload MP4':'No video'}</div>`
       : eu ? `<div class="video-wrap"><iframe src="${eu}" allowfullscreen></iframe></div>`
       : `<div class="no-embed">Bad URL</div>`;
