@@ -690,6 +690,50 @@ body{cursor:none;}
 .height-preset{padding:3px 8px;border:1px solid var(--border2);background:transparent;color:var(--muted);font-family:var(--ff-m);font-size:9px;letter-spacing:.08em;text-transform:uppercase;cursor:crosshair;transition:all .15s;}
 .height-preset:hover{border-color:var(--accent);color:var(--accent);}
 
+/* ── PROJECT THEME EFFECTS ─────────────────────────── */
+#proj-modal .theme-particles{position:fixed;top:0;left:0;width:100%;height:100%;pointer-events:none;z-index:401;opacity:.6;}
+
+/* Scroll-reveal for blocks */
+.reveal-block{opacity:0;transform:translateY(28px);transition:opacity .7s cubic-bezier(.16,1,.3,1),transform .7s cubic-bezier(.16,1,.3,1);}
+.reveal-block.revealed{opacity:1;transform:translateY(0);}
+
+/* Per-project accent overrides on modal */
+#proj-modal[data-project="g1"]{--p-glow:rgba(64,96,32,.35);--p-accent:#6a9030;--p-accent2:#406020;--p-particle1:#5a8828;--p-particle2:#8ab848;--p-particle3:#3a5818;}
+#proj-modal[data-project="g-mythbound"]{--p-glow:rgba(112,48,192,.3);--p-accent:#9050e0;--p-accent2:#7030c0;--p-particle1:#8040d0;--p-particle2:#b070ff;--p-particle3:#5020a0;}
+#proj-modal[data-project="g-chess"]{--p-glow:rgba(144,144,144,.2);--p-accent:#b0b0b0;--p-accent2:#707070;--p-particle1:#808080;--p-particle2:#c0c0c0;--p-particle3:#505050;}
+
+/* Themed subsection headers */
+#proj-modal[data-project] .subsec-hdr{border-bottom-color:var(--p-accent2);}
+#proj-modal[data-project] .subsec-hdr::before{background:var(--p-accent);}
+#proj-modal[data-project] .subsec-hdr::after{background:var(--p-accent);}
+
+/* Themed tab buttons */
+#proj-modal[data-project] .proj-tab.active{border-bottom-color:var(--p-accent);color:var(--p-accent);}
+
+/* Themed section containers in view mode */
+body:not(.edit-mode) #proj-modal[data-project] .section-container-inner{border-left:1px solid var(--p-accent2);background:linear-gradient(135deg,rgba(0,0,0,0) 0%,var(--p-glow) 100%);padding:16px;border-radius:4px;}
+
+/* Subtle glow on project header */
+#proj-modal[data-project] .ph-title{text-shadow:0 0 40px var(--p-glow);}
+
+/* Ambient gradient at top of modal */
+#proj-modal[data-project]::before{content:'';position:fixed;top:0;left:0;right:0;height:300px;background:radial-gradient(ellipse 80% 200px at 50% -40px,var(--p-glow),transparent 70%);pointer-events:none;z-index:401;opacity:.5;}
+
+/* VeilWood: earthy, mossy glow */
+#proj-modal[data-project="g1"] .ph-eyebrow{color:#6a9030;}
+#proj-modal[data-project="g1"] .proj-divider{background:linear-gradient(90deg,transparent,#406020,transparent);}
+
+/* Mythbound: arcane purple energy */
+#proj-modal[data-project="g-mythbound"] .ph-eyebrow{color:#9050e0;}
+#proj-modal[data-project="g-mythbound"] .proj-divider{background:linear-gradient(90deg,transparent,#7030c0,transparent);}
+
+/* Chess Shifter: clean monochrome */
+#proj-modal[data-project="g-chess"] .ph-eyebrow{color:#a0a0a0;}
+#proj-modal[data-project="g-chess"] .proj-divider{background:linear-gradient(90deg,transparent,#606060,transparent);}
+
+/* Divider styling override for themed projects */
+#proj-modal[data-project] .proj-divider{height:1px;border:none;}
+
 /* ── BACK TO TOP ───────────────────────────────────── */
 #back-to-top{position:fixed;bottom:28px;left:28px;z-index:100;width:40px;height:40px;background:var(--surface);border:1px solid var(--border2);color:var(--muted);font-size:14px;cursor:crosshair;display:flex;align-items:center;justify-content:center;opacity:0;pointer-events:none;transition:all .3s;transform:translateY(10px);}
 #back-to-top.visible{opacity:1;pointer-events:auto;transform:translateY(0);}
@@ -1869,6 +1913,29 @@ const DEFS = [
           },
           {
             "type": "subsection-header",
+            "label": "Objective Logic — Relic Rush"
+          },
+          {
+            "type": "section",
+            "layout": "one-two",
+            "cols": [
+              [
+                {
+                  "type": "text",
+                  "content": "Built the core objective logic for Mythbound's premier gamemode, Relic Rush. A relic spawns at a neutral point and must be carried to one of the enemy team's three goals. Destroying a goal respawns the relic; destroying all three eliminates that team's respawns.\n\nThe relic's state — dropped, held, or thrown — replicates across all clients with full visual sync. Ownership changes, physics handoffs, and mid-air interceptions all route through the server to prevent desync.\n\nThe HUD reflects team-relative context dynamically: carriers see enemy goal markers, teammates of the carrier see goal markers plus an escort prompt, opponents see a kill indicator on the carrier and defend markers on their own goals, and a neutral dropped state shows a take prompt to all players."
+                }
+              ],
+              [
+                {
+                  "type": "embed",
+                  "url": "",
+                  "file": "assets/videos/objectiveUI.webm"
+                }
+              ]
+            ]
+          },
+          {
+            "type": "subsection-header",
             "label": "Applied Effects System"
           },
           {
@@ -1906,7 +1973,19 @@ const DEFS = [
               [
                 {
                   "type": "text",
-                  "content": "Implemented in C++ to bypass Blueprint's networking limitations that were routing audio solely through the game state. The system broadcasts sound cues via RPCs with attenuation handled per-client, preventing the owning client from double-playing sounds that were also triggered by prediction. Fallback handling ensures sounds still play if the RPC is dropped."
+                  "content": "Built a C++ networked sound system to give designers a clean node for playing replicated audio without bloating the project with Gameplay Cues. The PlayGameSound node lets designers specify a sound asset, location, 2D/3D mode, and replication scope (team, all, etc.) directly in Blueprint. Under the hood, the system routes sound relay requests through the GameState — since it's always replicated — and each player has a sound receiver ActorComponent that processes incoming requests and plays audio with proper attenuation on their client."
+                },
+                {
+                  "type": "media",
+                  "files": [
+                    "assets/images/playgamesound.png"
+                  ],
+                  "meta": {
+                    "0": {
+                      "caption": "PlayGameSound — the designer-facing Blueprint node. Accepts a sound asset, world location, 2D flag, replication type, and instigator. Routes through the GameState to all relevant clients.",
+                      "fit": "contain"
+                    }
+                  }
                 }
               ]
             ]
@@ -1923,29 +2002,6 @@ const DEFS = [
                 {
                   "type": "text",
                   "content": "Server-side respawn timer per player with spectator state during the countdown. Spawn point selection uses a scoring function that weighs distance from enemies and proximity to teammates, preventing spawn-trapping in small arena layouts. Timer and spawn state are replicated to the relevant client's HUD."
-                }
-              ]
-            ]
-          },
-          {
-            "type": "subsection-header",
-            "label": "Objective Logic — Relic Rush"
-          },
-          {
-            "type": "section",
-            "layout": "one-two",
-            "cols": [
-              [
-                {
-                  "type": "text",
-                  "content": "Built the core objective logic for Mythbound's premier gamemode, Relic Rush. A relic spawns at a neutral point and must be carried to one of the enemy team's three goals. Destroying a goal respawns the relic; destroying all three eliminates that team's respawns.\n\nThe relic's state — dropped, held, or thrown — replicates across all clients with full visual sync. Ownership changes, physics handoffs, and mid-air interceptions all route through the server to prevent desync.\n\nThe HUD reflects team-relative context dynamically: carriers see enemy goal markers, teammates of the carrier see goal markers plus an escort prompt, opponents see a kill indicator on the carrier and defend markers on their own goals, and a neutral dropped state shows a take prompt to all players."
-                }
-              ],
-              [
-                {
-                  "type": "embed",
-                  "url": "",
-                  "file": "assets/videos/objectiveUI.webm"
                 }
               ]
             ]
@@ -2326,8 +2382,10 @@ function openProj(id){
   document.getElementById('pm-title').textContent=g.title;
   renderModal(g);
   const m=document.getElementById('proj-modal');
+  m.setAttribute('data-project', id);
   m.classList.add('open'); m.scrollTop=0;
   document.body.style.overflow='hidden';
+  initThemeEffects(g);
 }
 
 function closeProj(){
@@ -2879,6 +2937,7 @@ window.openProj = function(id) {
   const g = games.find(x => x.id === id);
   if (!g) return;
   curGid = id;
+  m.setAttribute('data-project', id);
   const mainName = document.querySelector('[data-save="nav-name"]');
   const pmName = document.getElementById('pm-nav-name');
   if (mainName && pmName) pmName.textContent = mainName.textContent;
@@ -2886,12 +2945,14 @@ window.openProj = function(id) {
   renderModal(g);
   m.scrollTop = 0;
   document.body.style.overflow = 'hidden';
+  initThemeEffects(g);
 };
 
 const _origCloseProj = closeProj;
 window.closeProj = function() {
   const m = document.getElementById('proj-modal');
   m.classList.add('proj-leaving');
+  cleanupThemeEffects();
   setTimeout(() => {
     m.classList.remove('proj-leaving');
     m.classList.remove('open');
@@ -2924,8 +2985,10 @@ function switchProj(id, dir) {
     const pmName = document.getElementById('pm-nav-name');
     if (mainName && pmName) pmName.textContent = mainName.textContent;
     document.getElementById('pm-title').textContent = g.title;
+    modal.setAttribute('data-project', id);
     renderModal(g);
     modal.scrollTop = 0;
+    initThemeEffects(g);
 
     // Slide in from opposite direction
     body.classList.add(inClass);
@@ -3668,6 +3731,146 @@ function ssStep(id, dir) {
   const total = el.querySelectorAll('.slideshow-track img').length;
   const cur = parseInt(el.dataset.current||'0');
   ssGo(id, (cur + dir + total) % total);
+}
+
+// ════════════════════════════════════════════════════════
+//  PROJECT THEME EFFECTS
+// ════════════════════════════════════════════════════════
+let themeParticleRAF = null;
+let themeCanvas = null;
+
+function initThemeEffects(g) {
+  // Clean up previous
+  if (themeParticleRAF) { cancelAnimationFrame(themeParticleRAF); themeParticleRAF = null; }
+  if (themeCanvas) { themeCanvas.remove(); themeCanvas = null; }
+
+  if (editMode) return; // no effects in edit mode
+
+  const modal = document.getElementById('proj-modal');
+  if (!modal) return;
+
+  // ── Floating particles ──
+  const canvas = document.createElement('canvas');
+  canvas.className = 'theme-particles';
+  modal.appendChild(canvas);
+  themeCanvas = canvas;
+  const ctx = canvas.getContext('2d');
+
+  function resize() {
+    canvas.width = window.innerWidth;
+    canvas.height = window.innerHeight;
+  }
+  resize();
+  window.addEventListener('resize', resize);
+
+  // Particle config per project
+  const configs = {
+    'g1': {
+      colors: ['#5a8828','#8ab848','#3a5818','#4a7020'],
+      count: 35, minSize: 1.5, maxSize: 4, speed: 0.3,
+      drift: true, glow: true, glowSize: 8
+    },
+    'g-mythbound': {
+      colors: ['#8040d0','#b070ff','#5020a0','#c090ff'],
+      count: 28, minSize: 1, maxSize: 3.5, speed: 0.5,
+      drift: false, glow: true, glowSize: 12
+    },
+    'g-chess': {
+      colors: ['#808080','#b0b0b0','#606060','#d0d0d0'],
+      count: 20, minSize: 1, maxSize: 2.5, speed: 0.2,
+      drift: false, glow: false, glowSize: 0
+    }
+  };
+
+  const cfg = configs[g.id] || configs['g-chess'];
+  const particles = [];
+
+  for (let i = 0; i < cfg.count; i++) {
+    particles.push({
+      x: Math.random() * canvas.width,
+      y: Math.random() * canvas.height,
+      size: cfg.minSize + Math.random() * (cfg.maxSize - cfg.minSize),
+      color: cfg.colors[Math.floor(Math.random() * cfg.colors.length)],
+      vx: (Math.random() - 0.5) * cfg.speed,
+      vy: -cfg.speed * 0.5 - Math.random() * cfg.speed * 0.5,
+      opacity: 0.2 + Math.random() * 0.5,
+      phase: Math.random() * Math.PI * 2,
+      drift: cfg.drift ? (Math.random() - 0.5) * 0.8 : 0
+    });
+  }
+
+  function animate() {
+    ctx.clearRect(0, 0, canvas.width, canvas.height);
+    const t = Date.now() * 0.001;
+
+    particles.forEach(p => {
+      p.x += p.vx + Math.sin(t + p.phase) * p.drift * 0.3;
+      p.y += p.vy;
+      const flicker = 0.7 + Math.sin(t * 2 + p.phase) * 0.3;
+
+      // Wrap around
+      if (p.y < -10) { p.y = canvas.height + 10; p.x = Math.random() * canvas.width; }
+      if (p.x < -10) p.x = canvas.width + 10;
+      if (p.x > canvas.width + 10) p.x = -10;
+
+      ctx.globalAlpha = p.opacity * flicker;
+
+      if (cfg.glow) {
+        ctx.shadowBlur = cfg.glowSize;
+        ctx.shadowColor = p.color;
+      } else {
+        ctx.shadowBlur = 0;
+      }
+
+      ctx.fillStyle = p.color;
+      ctx.beginPath();
+      ctx.arc(p.x, p.y, p.size, 0, Math.PI * 2);
+      ctx.fill();
+    });
+
+    ctx.globalAlpha = 1;
+    ctx.shadowBlur = 0;
+    themeParticleRAF = requestAnimationFrame(animate);
+  }
+
+  animate();
+
+  // ── Scroll reveal for blocks ──
+  setTimeout(() => {
+    const blocks = modal.querySelectorAll('.block-wrap, .section-container, .subsec-hdr');
+    blocks.forEach((el, i) => {
+      el.classList.add('reveal-block');
+      el.style.transitionDelay = `${Math.min(i * 0.04, 0.3)}s`;
+    });
+
+    function checkReveal() {
+      const modalRect = modal.getBoundingClientRect();
+      const threshold = modalRect.bottom + 60;
+      blocks.forEach(el => {
+        if (el.classList.contains('revealed')) return;
+        const rect = el.getBoundingClientRect();
+        if (rect.top < threshold && rect.bottom > modalRect.top) {
+          el.classList.add('revealed');
+        }
+      });
+    }
+
+    checkReveal(); // initial check
+    modal.addEventListener('scroll', checkReveal, { passive: true });
+    // Store ref for cleanup
+    modal._themeScrollHandler = checkReveal;
+  }, 150);
+}
+
+function cleanupThemeEffects() {
+  if (themeParticleRAF) { cancelAnimationFrame(themeParticleRAF); themeParticleRAF = null; }
+  if (themeCanvas) { themeCanvas.remove(); themeCanvas = null; }
+  const m = document.getElementById('proj-modal');
+  if (m) {
+    if (m._themeScrollHandler) { m.removeEventListener('scroll', m._themeScrollHandler); m._themeScrollHandler = null; }
+    m.removeAttribute('data-project');
+    m.querySelectorAll('.reveal-block').forEach(el => { el.classList.remove('reveal-block','revealed'); el.style.transitionDelay = ''; });
+  }
 }
 
 // ════════════════════════════════════════════════════════
