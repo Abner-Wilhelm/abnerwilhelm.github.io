@@ -2048,19 +2048,38 @@ const DEFS = [
       },
       {
         "type": "section",
-        "layout": "full",
+        "layout": "one-two",
         "cols": [
           [
             {
               "type": "text",
-              "content": "Each chess piece type is defined by a ScriptableObject carrying its movement pattern, attack range, and special properties. The movement and AI systems reference this data directly, meaning new piece types can be added without touching core logic."
-            },
+              "content": "Every piece type in Chess Shifter is defined through a ScriptableObject that holds its movement patterns, attack patterns, and sprites. The movement and AI systems read directly from this data, so adding a new piece type means creating a new asset and assigning its rules. Custom movement patterns can also be authored here, which is how I built unique pieces that go beyond standard chess rules."
+            }
+          ],
+          [
             {
               "type": "media",
-              "files": []
+              "files": ["assets/images/chess-piecedata-pawn.png"],
+              "meta": {
+                "0": { "caption": "Pawn Piece Data inspector. Holds player/enemy sprites, a reference to the piece's Movement Pattern, aggression flag, sounds, UI icons, and an enemy description.", "fit": "contain" }
+              }
             }
           ]
         ]
+      },
+      {
+        "type": "media",
+        "slideshow": true,
+        "files": [
+          "assets/images/chess-movement-knight.png",
+          "assets/images/chess-movement-pawn.png",
+          "assets/images/chess-movement-queen.png"
+        ],
+        "meta": {
+          "0": { "caption": "Knight Movement Pattern. Each offset is manually defined as an (X, Y) coordinate pair, giving the Knight its 8 L-shaped moves. Custom pieces use the same system with whatever offsets the designer wants.", "fit": "contain" },
+          "1": { "caption": "Pawn Movement Pattern. Straight Tiles is set to 1 (one tile forward), but Attack Same As Moveset is unchecked. Attack Diagonal Tiles is 1, meaning the Pawn attacks on adjacent diagonals while moving straight, just like in real chess.", "fit": "contain" },
+          "2": { "caption": "Queen Movement Pattern. Infinite Diagonals and Infinite Straights are both checked, giving the Queen unlimited range in all 8 directions. No manual offsets needed.", "fit": "contain" }
+        }
       },
       {
         "type": "subsection-header",
@@ -2068,16 +2087,18 @@ const DEFS = [
       },
       {
         "type": "section",
-        "layout": "full",
+        "layout": "one-two",
         "cols": [
           [
             {
               "type": "text",
-              "content": "The movement system calculates legal moves for the player's current piece type on a grid each turn. Player input is validated against the piece's legal move set before any position change is committed, so illegal moves are rejected cleanly without special-casing per piece."
-            },
+              "content": "When it's the player's turn, the system reads their current piece type and highlights every tile they can legally move to, following standard chess movement rules. The player selects a tile, and if it's valid, the move commits. Since movement rules live in Piece Data, the same system handles standard pieces and custom ones without any special-casing. This also means if the player shifts into a new piece mid-room, their available moves update immediately."
+            }
+          ],
+          [
             {
-              "type": "media",
-              "files": []
+              "type": "embed",
+              "file": "assets/videos/chess-movement.webm"
             }
           ]
         ]
@@ -2093,22 +2114,18 @@ const DEFS = [
           [
             {
               "type": "text",
-              "content": "Enemy pieces evaluate the board state each turn and move based on their piece type's attack pattern and the player's position. Each piece type pursues or threatens differently: a Rook moves directly toward the player along ranks and files, a Knight jumps unpredictably. The player has to manage multiple threat models simultaneously."
-            },
-            {
-              "type": "media",
-              "files": []
+              "content": "Enemy AI operates on a priority system. If an enemy can put the player in check, it will. Otherwise, it moves to the tile closest to the player. More advanced enemies take it further: they predict the player's next moves and try to position themselves where they can threaten the player on future turns. Advanced AI also reads the player's current piece type and adjusts pathing to exploit that piece's weaknesses.\n\nOne thing I prioritized was determinism. Given the same player moves, enemies will always respond the same way. Nothing is random. This lets the player learn enemy behavior over repeated attempts and figure out what they need to change in their own approach to clear a room."
             }
           ]
         ]
       },
       {
         "type": "subsection-header",
-        "label": "Piece Shifting Methods"
+        "label": "Piece Shifting"
       },
       {
         "type": "text",
-        "content": "[Describe the shifting system overall — how a transformation is triggered, what changes about the player when they shift, and how the game communicates the shift clearly.]"
+        "content": "Piece shifting is the core mechanic that separates Chess Shifter from a standard chess puzzle. The player's piece type can change mid-room through two methods: Shifting Tiles (passive, triggered on contact) and Totems (active, used from inventory). Both methods fundamentally change how rooms play out, and most of the later puzzle design revolves around when and how the player shifts."
       },
       {
         "type": "sub-header",
@@ -2121,13 +2138,13 @@ const DEFS = [
           [
             {
               "type": "text",
-              "content": "Shifting Tiles are board squares that transform the player into a different piece type on contact. The shift can be permanent or temporary depending on the tile configuration. Levels are designed around the transformation as a core mechanic, forcing the player to plan their route based on what they'll become."
+              "content": "Shifting Tiles are board tiles that change whatever lands on them (or crosses over them) into the piece type the tile displays. Each tile can be configured to affect just the player, just enemies, or both. This opened up a lot of design space: I could force the player into a new piece to solve the next section, force an enemy to become something less threatening, or give the player a choice between two different shifts on the same path."
             }
           ],
           [
             {
-              "type": "media",
-              "files": []
+              "type": "embed",
+              "file": "assets/videos/chess-shifters.webm"
             }
           ]
         ]
@@ -2143,20 +2160,20 @@ const DEFS = [
           [
             {
               "type": "text",
-              "content": "Totems are interactive objects the player can choose to activate, triggering a piece shift on demand. Unlike Shifting Tiles (which are passive), Totems give the player agency over when to transform, opening up strategic decisions about timing the shift relative to enemy positions."
+              "content": "Totems are pickup items that let the player shift on their own terms. Unlike Shifting Tiles, where landing on the tile triggers the change automatically, Totems are stored in the player's inventory and consumed when activated. The player decides when to use it, which adds a layer of timing and resource management. Each Totem represents a specific piece type, so the player knows exactly what they're getting before they commit."
             }
           ],
           [
             {
-              "type": "media",
-              "files": []
+              "type": "embed",
+              "file": "assets/videos/chess-totem.webm"
             }
           ]
         ]
       },
       {
         "type": "subsection-header",
-        "label": "Inventory"
+        "label": "Teleporters"
       },
       {
         "type": "section",
@@ -2165,11 +2182,7 @@ const DEFS = [
           [
             {
               "type": "text",
-              "content": "The player carries a small inventory of items that interact with pieces or shifts: consumables that temporarily extend a piece's movement range, block an enemy's path, or grant an extra shift charge. Inventory state persists across rooms within a run."
-            },
-            {
-              "type": "media",
-              "files": []
+              "content": "Teleporters are one-way transport tiles that move whoever lands on them from the start point to the end point. Both the player and enemy pieces can trigger them, and they can be used multiple times. This adds another variable to room planning: the player has to account for where a teleporter will drop them relative to enemies, and enemies using teleporters can create surprise threats from across the board."
             }
           ]
         ]
@@ -2185,14 +2198,14 @@ const DEFS = [
           [
             {
               "type": "text",
-              "content": "Designed ten puzzle rooms that scale in difficulty while introducing one new mechanic per room. Early rooms teach the movement and shifting basics; later rooms combine Shifting Tiles, Totems, enemy AI, and inventory in configurations that require planning multiple turns ahead. Won \"Best Overall Game\" at FIEA."
-            },
-            {
-              "type": "media",
-              "files": []
+              "content": "The game has ten levels that progressively ramp in difficulty. Early rooms are tight: three possible moves, and only one of them doesn't get you killed. This teaches the player to read the board carefully before committing. As new piece types get introduced, each room is built around that piece's mechanics. A Bishop room leans into diagonal play, a Knight room forces the player to think in L-shapes.\n\nLater levels layer in Shifting Tiles, Totems, and Teleporters alongside enemies, combining mechanics the player has already learned individually. Some rooms have no enemies at all and exist purely as puzzle spaces where the player can experiment with how pieces move.\n\nOne design element I'm particularly proud of is Knight hopping. In the lava sections, the Knight's unique movement becomes a traversal tool rather than just a combat option. I built entire encounters around the idea that the Knight can hop over hazards that would block any other piece, which gave those rooms a completely different feel from the rest of the game."
             }
           ]
         ]
+      },
+      {
+        "type": "subsection-header",
+        "label": "Future Plans"
       },
       {
         "type": "section",
@@ -2200,14 +2213,14 @@ const DEFS = [
         "cols": [
           [
             {
-              "type": "media",
-              "files": []
+              "type": "text",
+              "content": "Chess Shifter isn't done. I plan to continue development with unique enemy types that go beyond standard chess pieces, a level select system, more complex puzzles, and per-level mechanics that keep the player learning something new in every room."
             }
           ]
         ]
       }
     ],
-    "reflection": "ChessShifter was a solo sprint — five weeks from concept to submission. The core constraint (you ARE the chess piece) forced every other system to serve that one idea cleanly. The biggest lesson was that a strong mechanical hook eliminates a lot of design problems: players instinctively understood the rules because they already knew chess. Winning Best Overall at FIEA validated that the mechanic was communicating as intended."
+    "reflection": ""
   }
 ]
 ;
