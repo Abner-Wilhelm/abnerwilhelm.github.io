@@ -2036,7 +2036,7 @@ const DEFS = [
       "technical design"
     ],
     "thumb": "assets/thumbs/chess-shifter.webm",
-    "banner": "assets/thumbs/chess-shifter.webm",
+    "banner": "assets/videos/chess-shifters.webm",
     "bg": "#080808",
     "ac": "#282828",
     "pr": "#909090",
@@ -2056,30 +2056,8 @@ const DEFS = [
               "content": "Every piece type in Chess Shifter is defined through a ScriptableObject that holds its movement patterns, attack patterns, and sprites. The movement and AI systems read directly from this data, so adding a new piece type means creating a new asset and assigning its rules. Custom movement patterns can also be authored here, which is how I built unique pieces that go beyond standard chess rules."
             }
           ],
-          [
-            {
-              "type": "media",
-              "files": ["assets/images/chess-piecedata-pawn.png"],
-              "meta": {
-                "0": { "caption": "Pawn Piece Data inspector. Holds player/enemy sprites, a reference to the piece's Movement Pattern, aggression flag, sounds, UI icons, and an enemy description.", "fit": "contain" }
-              }
-            }
-          ]
+          []
         ]
-      },
-      {
-        "type": "media",
-        "slideshow": true,
-        "files": [
-          "assets/images/chess-movement-knight.png",
-          "assets/images/chess-movement-pawn.png",
-          "assets/images/chess-movement-queen.png"
-        ],
-        "meta": {
-          "0": { "caption": "Knight Movement Pattern. Each offset is manually defined as an (X, Y) coordinate pair, giving the Knight its 8 L-shaped moves. Custom pieces use the same system with whatever offsets the designer wants.", "fit": "contain" },
-          "1": { "caption": "Pawn Movement Pattern. Straight Tiles is set to 1 (one tile forward), but Attack Same As Moveset is unchecked. Attack Diagonal Tiles is 1, meaning the Pawn attacks on adjacent diagonals while moving straight, just like in real chess.", "fit": "contain" },
-          "2": { "caption": "Queen Movement Pattern. Infinite Diagonals and Infinite Straights are both checked, giving the Queen unlimited range in all 8 directions. No manual offsets needed.", "fit": "contain" }
-        }
       },
       {
         "type": "subsection-header",
