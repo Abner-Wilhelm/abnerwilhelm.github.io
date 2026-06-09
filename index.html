@@ -55,8 +55,9 @@ body{cursor:none;}
 /* ── NAV ─────────────────────────────────────── */
 nav{position:fixed;top:38px;left:0;right:0;z-index:200;display:flex;justify-content:space-between;align-items:center;padding:18px 48px;transition:all .4s;}
 nav.scrolled{background:rgba(9,9,9,.9);backdrop-filter:blur(14px);border-bottom:1px solid var(--border);}
-.nav-logo{font-family:var(--ff-d);font-size:21px;font-weight:300;color:var(--white);text-decoration:none;cursor:crosshair;letter-spacing:.04em;}
+.nav-logo{font-family:var(--ff-d);font-size:21px;font-weight:300;color:var(--white);text-decoration:none;cursor:crosshair;letter-spacing:.04em;display:flex;flex-direction:column;line-height:1.1;}
 .nav-logo em{color:var(--accent);font-style:normal;}
+.nav-title{font-family:var(--ff-m);font-size:9px;letter-spacing:.2em;text-transform:uppercase;color:var(--muted);margin-top:3px;}
 .nav-links{display:flex;gap:32px;list-style:none;}
 .nav-links a{color:var(--muted);text-decoration:none;font-size:11px;letter-spacing:.15em;text-transform:uppercase;transition:color .2s;position:relative;cursor:crosshair;}
 .nav-links a::after{content:'';position:absolute;bottom:-2px;left:0;width:0;height:1px;background:var(--accent);transition:width .3s;}
@@ -88,7 +89,7 @@ section{padding:80px 48px;}
 .hero-blob{position:absolute;width:580px;height:580px;border-radius:50%;background:radial-gradient(circle,rgba(95,180,216,.07) 0%,transparent 70%);top:50%;left:62%;transform:translate(-50%,-50%);pointer-events:none;animation:blobPulse 9s ease-in-out infinite;}
 @keyframes blobPulse{0%,100%{transform:translate(-50%,-50%) scale(1);}50%{transform:translate(-50%,-50%) scale(1.13);}}
 .hero-scanlines{position:absolute;inset:0;background:repeating-linear-gradient(to bottom,transparent 0px,transparent 3px,rgba(0,0,0,.07) 3px,rgba(0,0,0,.07) 4px);pointer-events:none;}
-.hero-eyebrow{font-size:11px;letter-spacing:.25em;text-transform:uppercase;color:var(--accent);margin-bottom:22px;opacity:0;animation:fadeUp .8s .2s forwards;}
+.hero-eyebrow{font-size:17px;letter-spacing:.2em;text-transform:uppercase;color:var(--accent);margin-bottom:22px;opacity:0;animation:fadeUp .8s .2s forwards;}
 .hero-eyebrow::before{content:'// ';}
 .hero-name{font-family:var(--ff-d);font-size:clamp(68px,10vw,136px);font-weight:300;line-height:.9;color:var(--white);letter-spacing:-.02em;opacity:0;animation:fadeUp .8s .4s forwards;}
 .hero-name em{font-style:italic;color:var(--accent);}
@@ -196,7 +197,7 @@ footer{padding:28px 48px;border-top:1px solid var(--border);display:flex;justify
 .ph-eyebrow{font-size:10px;letter-spacing:.25em;text-transform:uppercase;color:var(--accent);margin-bottom:10px;}
 .ph-title{font-family:var(--ff-d);font-size:clamp(52px,8vw,100px);font-weight:300;line-height:.88;color:var(--white);letter-spacing:-.02em;margin-bottom:10px;}
 .ph-studio{font-size:11px;letter-spacing:.18em;text-transform:uppercase;color:var(--muted);margin-bottom:32px;}
-.ph-meta{display:grid;grid-template-columns:repeat(auto-fill,minmax(160px,1fr));gap:1px;border:1px solid var(--border);margin-bottom:48px;}
+.ph-meta{display:grid;grid-template-columns:repeat(4,1fr);gap:1px;border:1px solid var(--border);margin-bottom:48px;}
 .ph-meta-item{padding:14px 18px;background:var(--surface);border-right:1px solid var(--border);}
 .ph-meta-item:last-child{border-right:none;}
 .ph-meta-lbl{font-size:9px;letter-spacing:.2em;text-transform:uppercase;color:var(--muted);margin-bottom:4px;}
@@ -733,7 +734,7 @@ body:not(.edit-mode) #proj-modal[data-project] .section-container-inner{border-l
   background-image:
     linear-gradient(rgba(180,180,180,.03) 1px, transparent 1px),
     linear-gradient(90deg, rgba(180,180,180,.03) 1px, transparent 1px);
-  background-size:8px 8px;
+  background-size:24px 24px;
 }
 /* Chess Shifter: pixelated font feel on headers */
 #proj-modal[data-project="g-chess"] .subsec-hdr{letter-spacing:.04em;image-rendering:pixelated;}
@@ -813,7 +814,7 @@ body:not(.edit-mode) #proj-modal[data-project] .section-container-inner{border-l
 
 <!-- NAV -->
 <nav id="main-nav" class="scrolled">
-  <a class="nav-logo" href="#hero"><span data-save="nav-name" contenteditable="false">abner</span><em>.</em>wilhelm</a>
+  <a class="nav-logo" href="#hero"><span><span data-save="nav-name" contenteditable="false">abner</span><em>.</em>wilhelm</span><span class="nav-title">Technical Designer</span></a>
   <ul class="nav-links">
     <li><a href="#games">Work</a></li>
     <li><a href="#about">About</a></li>
@@ -827,7 +828,7 @@ body:not(.edit-mode) #proj-modal[data-project] .section-container-inner{border-l
   <div class="hero-scanlines"></div>
   <p class="hero-eyebrow" id="hero-eyebrow" data-save="h-eyebrow" contenteditable="false">technical designer · gameplay programmer</p>
   <h1 class="hero-name"><span data-save="h-line1" contenteditable="false">Abner</span><br><em data-save="h-line2" contenteditable="false">Wilhelm</em></h1>
-  <p class="hero-tagline" data-save="h-tagline" contenteditable="false">I build the systems that make games feel alive — networked abilities, AI behaviors, modular tooling, and the moment-to-moment loops players actually feel.</p>
+  <p class="hero-tagline" data-save="h-tagline" contenteditable="false">Specializing in gameplay programming, networked ability systems, AI state machines, systems design, and puzzle design.</p>
   <div class="hero-cta">
     <a href="#games" class="btn btn-primary">View my work</a>
     <a href="#contact" class="btn btn-ghost">Get in touch</a>
@@ -872,84 +873,6 @@ body:not(.edit-mode) #proj-modal[data-project] .section-container-inner{border-l
       </div>
     </div>
   </div>
-  <!-- TECH STACK -->
-  <div class="reveal" style="margin-top:56px;">
-    <p class="section-label" style="margin-bottom:8px;">Tech Stack</p>
-    <div class="tech-stack" id="tech-stack">
-    <div class="tech-category">
-      <div class="tech-cat-label" contenteditable="false" onblur="renameTechCat(&#39;Engines&#39;,this.innerText)">Engines</div>
-      <div class="tech-badges">
-        
-          <div class="tech-badge" contenteditable="false" onblur="updateTechBadge(&#39;Engines&#39;,0,this.innerText)">Unity
-            <div class="tech-badge-del" onclick="deleteTechBadge(&#39;Engines&#39;,0)">×</div>
-          </div>
-          <div class="tech-badge" contenteditable="false" onblur="updateTechBadge(&#39;Engines&#39;,1,this.innerText)">Unreal Engine 5
-            <div class="tech-badge-del" onclick="deleteTechBadge(&#39;Engines&#39;,1)">×</div>
-          </div>
-          <div class="tech-badge" contenteditable="false" onblur="updateTechBadge(&#39;Engines&#39;,2,this.innerText)">Godot 4
-            <div class="tech-badge-del" onclick="deleteTechBadge(&#39;Engines&#39;,2)">×</div>
-          </div>
-        <button class="add-tech-btn" onclick="addTechBadge(&#39;Engines&#39;)">+ Add</button>
-      </div>
-    </div>
-    <div class="tech-category">
-      <div class="tech-cat-label" contenteditable="false" onblur="renameTechCat(&#39;Languages&#39;,this.innerText)">Languages</div>
-      <div class="tech-badges">
-        
-          <div class="tech-badge" contenteditable="false" onblur="updateTechBadge(&#39;Languages&#39;,0,this.innerText)">C#
-            <div class="tech-badge-del" onclick="deleteTechBadge(&#39;Languages&#39;,0)">×</div>
-          </div>
-          <div class="tech-badge" contenteditable="false" onblur="updateTechBadge(&#39;Languages&#39;,1,this.innerText)">C++
-            <div class="tech-badge-del" onclick="deleteTechBadge(&#39;Languages&#39;,1)">×</div>
-          </div>
-          <div class="tech-badge" contenteditable="false" onblur="updateTechBadge(&#39;Languages&#39;,2,this.innerText)">GDScript
-            <div class="tech-badge-del" onclick="deleteTechBadge(&#39;Languages&#39;,2)">×</div>
-          </div>
-          <div class="tech-badge" contenteditable="false" onblur="updateTechBadge(&#39;Languages&#39;,3,this.innerText)">Blueprints
-            <div class="tech-badge-del" onclick="deleteTechBadge(&#39;Languages&#39;,3)">×</div>
-          </div>
-        <button class="add-tech-btn" onclick="addTechBadge(&#39;Languages&#39;)">+ Add</button>
-      </div>
-    </div>
-    <div class="tech-category">
-      <div class="tech-cat-label" contenteditable="false" onblur="renameTechCat(&#39;Tools&#39;,this.innerText)">Tools</div>
-      <div class="tech-badges">
-        
-          <div class="tech-badge" contenteditable="false" onblur="updateTechBadge(&#39;Tools&#39;,0,this.innerText)">Wwise
-            <div class="tech-badge-del" onclick="deleteTechBadge(&#39;Tools&#39;,0)">×</div>
-          </div>
-          <div class="tech-badge" contenteditable="false" onblur="updateTechBadge(&#39;Tools&#39;,1,this.innerText)">FMOD
-            <div class="tech-badge-del" onclick="deleteTechBadge(&#39;Tools&#39;,1)">×</div>
-          </div>
-          <div class="tech-badge" contenteditable="false" onblur="updateTechBadge(&#39;Tools&#39;,2,this.innerText)">Aseprite
-            <div class="tech-badge-del" onclick="deleteTechBadge(&#39;Tools&#39;,2)">×</div>
-          </div>
-          <div class="tech-badge" contenteditable="false" onblur="updateTechBadge(&#39;Tools&#39;,3,this.innerText)">Blender
-            <div class="tech-badge-del" onclick="deleteTechBadge(&#39;Tools&#39;,3)">×</div>
-          </div>
-        <button class="add-tech-btn" onclick="addTechBadge(&#39;Tools&#39;)">+ Add</button>
-      </div>
-    </div>
-    <div class="tech-category">
-      <div class="tech-cat-label" contenteditable="false" onblur="renameTechCat(&#39;Software&#39;,this.innerText)">Software</div>
-      <div class="tech-badges">
-        
-          <div class="tech-badge" contenteditable="false" onblur="updateTechBadge(&#39;Software&#39;,0,this.innerText)">Perforce
-            <div class="tech-badge-del" onclick="deleteTechBadge(&#39;Software&#39;,0)">×</div>
-          </div>
-          <div class="tech-badge" contenteditable="false" onblur="updateTechBadge(&#39;Software&#39;,1,this.innerText)">GitHub
-            <div class="tech-badge-del" onclick="deleteTechBadge(&#39;Software&#39;,1)">×</div>
-          </div>
-          <div class="tech-badge" contenteditable="false" onblur="updateTechBadge(&#39;Software&#39;,2,this.innerText)">Jira
-            <div class="tech-badge-del" onclick="deleteTechBadge(&#39;Software&#39;,2)">×</div>
-          </div>
-          <div class="tech-badge" contenteditable="false" onblur="updateTechBadge(&#39;Software&#39;,3,this.innerText)">Notion
-            <div class="tech-badge-del" onclick="deleteTechBadge(&#39;Software&#39;,3)">×</div>
-          </div>
-        <button class="add-tech-btn" onclick="addTechBadge(&#39;Software&#39;)">+ Add</button>
-      </div>
-    </div></div>
-  </div>
   </section>
 
 <!-- CONTACT -->
@@ -957,7 +880,7 @@ body:not(.edit-mode) #proj-modal[data-project] .section-container-inner{border-l
   <p class="section-label reveal">Let's talk</p>
   <h2 class="section-title reveal">Contact</h2>
   <div class="contact-inner">
-    <p class="contact-desc reveal" data-save="cd" contenteditable="false">Currently studying at FIEA in Orlando. Open to internships, collaborations, and conversations about technical design and gameplay programming.</p>
+    <p class="contact-desc reveal" data-save="cd" contenteditable="false">Currently studying at FIEA in Orlando. Open to work — internships, collaborations, and conversations about technical design and gameplay programming.</p>
     <div class="contact-links reveal">
       <a class="cl-row" href="#" onclick="event.preventDefault();const a=['abnerwilhelm','gmail.com'].join('@');location.href='mai'+'lto:'+a;"><span class="cl-plat">Email</span><span class="cl-handle" data-save="cl1" contenteditable="false"><span id="email-display">abnerwilhelm [at] gmail [dot] com</span></span><span class="cl-arr">↗</span></a>
       
@@ -997,7 +920,6 @@ body:not(.edit-mode) #proj-modal[data-project] .section-container-inner{border-l
       <div class="ph-meta">
         <div class="ph-meta-item"><div class="ph-meta-lbl">Role</div><div class="ph-meta-val" contenteditable="false">Lead Designer, Programmer, Composer</div></div>
         <div class="ph-meta-item"><div class="ph-meta-lbl">Duration</div><div class="ph-meta-val" contenteditable="false">September 2024 – November 2025 (WIP)</div></div>
-        <div class="ph-meta-item"><div class="ph-meta-lbl">Genre</div><div class="ph-meta-val" contenteditable="false">Farming-Survival RTS</div></div>
         <div class="ph-meta-item"><div class="ph-meta-lbl">Engine</div><div class="ph-meta-val" contenteditable="false">Unity</div></div>
         <div class="ph-meta-item"><div class="ph-meta-lbl">Status</div><div class="ph-meta-val" contenteditable="false">In Development</div></div>
       </div>
@@ -2047,17 +1969,8 @@ const DEFS = [
         "label": "Piece Data"
       },
       {
-        "type": "section",
-        "layout": "one-two",
-        "cols": [
-          [
-            {
-              "type": "text",
-              "content": "Every piece type in Chess Shifter is defined through a ScriptableObject that holds its movement patterns, attack patterns, and sprites. The movement and AI systems read directly from this data, so adding a new piece type means creating a new asset and assigning its rules. Custom movement patterns can also be authored here, which is how I built unique pieces that go beyond standard chess rules."
-            }
-          ],
-          []
-        ]
+        "type": "text",
+        "content": "Every piece type in Chess Shifter is defined through a ScriptableObject that holds its movement patterns, attack patterns, and sprites. The movement and AI systems read directly from this data, so adding a new piece type means creating a new asset and assigning its rules. Custom movement patterns can also be authored here, which is how I built unique pieces that go beyond standard chess rules."
       },
       {
         "type": "subsection-header",
@@ -2476,7 +2389,6 @@ function renderModal(g) {
       <div class="ph-meta">
         <div class="ph-meta-item"><div class="ph-meta-lbl">Role</div><div class="ph-meta-val" contenteditable="${ce}">${g.role||''}</div></div>
         <div class="ph-meta-item"><div class="ph-meta-lbl">Duration</div><div class="ph-meta-val" contenteditable="${ce}">${g.duration||''}</div></div>
-        <div class="ph-meta-item"><div class="ph-meta-lbl">Genre</div><div class="ph-meta-val" contenteditable="${ce}">${g.genre||''}</div></div>
         <div class="ph-meta-item"><div class="ph-meta-lbl">Engine</div><div class="ph-meta-val" contenteditable="${ce}">${g.engine||''}</div></div>
         <div class="ph-meta-item"><div class="ph-meta-lbl">Status</div><div class="ph-meta-val" contenteditable="${ce}">${g.status||''}</div></div>
       </div>
@@ -2497,7 +2409,7 @@ function renderModal(g) {
   body.querySelector('.ph-studio').addEventListener('blur',function(){const g2=gById(g.id);if(g2)g2.studio=this.innerText;});
   body.querySelector('.ph-desc').addEventListener('blur',function(){const g2=gById(g.id);if(g2)g2.desc=this.innerText;});
   const refBody=body.querySelector('.reflection-body'); if(refBody) refBody.addEventListener('blur',function(){const g2=gById(g.id);if(g2)g2.reflection=this.innerHTML;});
-  const metaFields=['role','duration','genre','engine','status'];
+  const metaFields=['role','duration','engine','status'];
   body.querySelectorAll('.ph-meta-val').forEach((el,i)=>{
     el.addEventListener('blur',function(){const g2=gById(g.id);if(g2)g2[metaFields[i]]=this.innerText;});
   });
@@ -3765,6 +3677,12 @@ function initThemeEffects(g) {
   window._sparkAc1 = tc.ac1;
   window._sparkAc2 = tc.ac2;
 
+  // Update cursor to match project theme
+  const _cur = document.getElementById('cursor');
+  const _dot = document.getElementById('cursor-dot');
+  if (_cur) _cur.style.borderColor = tc.ac1;
+  if (_dot) _dot.style.background  = tc.ac1;
+
   // ── Theme overlay div (CSS handles per-project look) ──
   const overlay = document.createElement('div');
   overlay.className = 'theme-overlay';
@@ -4033,6 +3951,13 @@ function cleanupThemeEffects() {
   if (themeParticleRAF) { cancelAnimationFrame(themeParticleRAF); themeParticleRAF = null; }
   if (themeCanvas) { themeCanvas.remove(); themeCanvas = null; }
   window._sparkAc1 = null; window._sparkAc2 = null;
+
+  // Reset cursor to default accent
+  const _cur = document.getElementById('cursor');
+  const _dot = document.getElementById('cursor-dot');
+  if (_cur) _cur.style.borderColor = '';
+  if (_dot) _dot.style.background  = '';
+
   const m = document.getElementById('proj-modal');
   if (m) {
     const ov = m.querySelector('.theme-overlay'); if (ov) ov.remove();
