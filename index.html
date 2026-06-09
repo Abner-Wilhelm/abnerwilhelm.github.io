@@ -40,8 +40,8 @@ body{cursor:none;}
 #proj-modal.open{opacity:1;transform:translateY(0);}
 
 /* ── RESET BUTTON ─────────────────────────────── */
-#reset-btn{position:fixed;top:0;right:48px;z-index:201;background:transparent;border:none;color:var(--muted);font-family:var(--ff-m);font-size:11px;letter-spacing:.15em;text-transform:uppercase;padding:18px 0;cursor:crosshair;transition:color .2s;}
-#reset-btn:hover{color:var(--white);}
+#reset-btn{background:transparent;border:none;color:var(--border2);font-family:var(--ff-m);font-size:16px;cursor:crosshair;transition:color .2s;padding:0;}
+#reset-btn:hover{color:var(--muted);}
 
 /* ── NAV ─────────────────────────────────────── */
 nav{position:fixed;top:0;left:0;right:0;z-index:200;display:flex;justify-content:space-between;align-items:center;padding:18px 48px;transition:all .4s;}
@@ -782,8 +782,7 @@ body:not(.edit-mode) #proj-modal[data-project] .section-container-inner{border-l
   </div>
 </div>
 
-<!-- RESET BUTTON -->
-<button id="reset-btn" onclick="resetAll()" title="Reset all data to defaults">↺</button>
+
 
 <!-- NAV -->
 <nav id="main-nav" class="scrolled">
@@ -874,6 +873,7 @@ body:not(.edit-mode) #proj-modal[data-project] .section-container-inner{border-l
     <p class="footer-updated">Portfolio last updated June 8, 2026</p>
   </div>
   <div class="footer-status"><div class="status-dot"></div><span data-save="fs" contenteditable="false">available for new projects</span></div>
+  <button id="reset-btn" onclick="resetAll()" title="Reset all data to defaults">↺</button>
 </footer>
 
 <!-- PROJECT MODAL -->
