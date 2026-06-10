@@ -1922,7 +1922,7 @@ const DEFS = [
   {
     "id": "g-chess",
     "title": "Chess Shifter",
-    "studio": "Solo — FIEA",
+    "studio": "FIEA",
     "year": "2025",
     "role": "Technical Designer",
     "duration": "November 2025 – December 2025",
@@ -2362,6 +2362,7 @@ function renderModal(g) {
         <div class="ph-meta-item"><div class="ph-meta-lbl">Role</div><div class="ph-meta-val" contenteditable="${ce}">${g.role||''}</div></div>
         <div class="ph-meta-item"><div class="ph-meta-lbl">Duration</div><div class="ph-meta-val" contenteditable="${ce}">${g.duration||''}</div></div>
         <div class="ph-meta-item"><div class="ph-meta-lbl">Team Size</div><div class="ph-meta-val" contenteditable="${ce}">${g.team === 1 ? 'Solo' : (g.team ? g.team + ' Members' : '')}</div></div>
+        <div class="ph-meta-item"><div class="ph-meta-lbl">Genre</div><div class="ph-meta-val" contenteditable="${ce}">${g.genre||''}</div></div>
         <div class="ph-meta-item"><div class="ph-meta-lbl">Engine</div><div class="ph-meta-val" contenteditable="${ce}">${g.engine||''}</div></div>
         <div class="ph-meta-item"><div class="ph-meta-lbl">Status</div><div class="ph-meta-val" contenteditable="${ce}">${g.status||''}</div></div>
       </div>
