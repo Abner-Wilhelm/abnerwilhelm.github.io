@@ -1204,6 +1204,7 @@ const DEFS = [
     "genre": "Multiplayer Arena Brawler",
     "engine": "Unreal Engine 5.7",
     "status": "In Development",
+    "team": 26,
     "desc": "Mythbound is a multiplayer arena brawler developed at Skaldforge, a team at FIEA (Florida Interactive Entertainment Academy). As Lead Technical Designer I own networked ability systems in GAS, design each character's kit around five systemic pillars, conduct code reviews, and bridge the gap between engineering and design.",
     "tags": [
       "multiplayer",
@@ -1507,6 +1508,7 @@ const DEFS = [
     "genre": "First Person Survival Farming Simulator",
     "engine": "Unity",
     "status": "In Development",
+    "team": 12,
     "desc": "VeilWood is a First Person Survival and Farming Simulator in development with a team of 12 at Chaos Cabin LLC. I served as Technical Designer, Level Designer, and Composer, building enemy and NPC state machines, designing and dressing the Catacombs and all game environments, creating seven puzzles and minigames, and composing ten original tracks that respond to time of day, location, and in-game events.",
     "tags": [
       "survival",
@@ -1927,7 +1929,8 @@ const DEFS = [
     "genre": "Puzzle",
     "engine": "Unity",
     "status": "Released",
-    "desc": "ChessShifter is a grid-based puzzle game where the player navigates rooms as a chess piece while being hunted by enemy pieces. Won \"Best Overall Game\" at FIEA. I built the movement system, enemy AI, the piece-shifting mechanics, and designed ten puzzle rooms that scale in difficulty while introducing new mechanics.",
+    "team": 1,
+    "desc": "Chess Shifter is a grid-based puzzle game where the player navigates rooms as a chess piece while being hunted by enemy pieces. Won \"Best Overall Game\" at FIEA. I built the movement system, enemy AI, the piece-shifting mechanics, and designed ten puzzle rooms that scale in difficulty while introducing new mechanics.",
     "tags": [
       "puzzle",
       "solo",
@@ -2206,7 +2209,7 @@ function renderCards() {
       </div>
       <div class="game-info">
         <div class="g-title">${g.title}</div>
-        <div class="g-studio">${g.studio||''}</div>
+        <div class="g-studio">${g.studio||''}${g.team ? ` · ${g.team === 1 ? 'Solo' : g.team + ' Members'}` : ''}</div>
         <p class="g-desc">${g.desc}</p>
         <div class="g-tags">${tags}</div>
         <input class="tags-in" placeholder="Tags, comma-separated" value="${g.tags.join(', ')}" oninput="updateTags('${g.id}',this.value)">
@@ -2358,6 +2361,7 @@ function renderModal(g) {
       <div class="ph-meta">
         <div class="ph-meta-item"><div class="ph-meta-lbl">Role</div><div class="ph-meta-val" contenteditable="${ce}">${g.role||''}</div></div>
         <div class="ph-meta-item"><div class="ph-meta-lbl">Duration</div><div class="ph-meta-val" contenteditable="${ce}">${g.duration||''}</div></div>
+        <div class="ph-meta-item"><div class="ph-meta-lbl">Team Size</div><div class="ph-meta-val" contenteditable="${ce}">${g.team === 1 ? 'Solo' : (g.team ? g.team + ' Members' : '')}</div></div>
         <div class="ph-meta-item"><div class="ph-meta-lbl">Engine</div><div class="ph-meta-val" contenteditable="${ce}">${g.engine||''}</div></div>
         <div class="ph-meta-item"><div class="ph-meta-lbl">Status</div><div class="ph-meta-val" contenteditable="${ce}">${g.status||''}</div></div>
       </div>
